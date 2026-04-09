@@ -1,0 +1,1264 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Academic Clean Palette */
+  --bg-main: #FDFDFB;
+  /* Warm Paper White */
+  --bg-surface: #FFFFFF;
+  /* Pure White */
+  --bg-sidebar: #FDFDFB;
+  /* Matches main for cohesive look */
+
+  --primary: #364E68;
+  /* Deep Navy/Indigo */
+  --primary-muted: #E2E6EC;
+  --accent: #3B82F6;
+  /* Bright Blue for focal items */
+
+  --text-main: #1C1E21;
+  /* Dark Charcoal */
+  --text-muted: #828C9A;
+  /* Soft Gray */
+  --text-links: #364E68;
+
+  --border: #E2E6EC;
+  /* Crisp Thin Border */
+  --border-active: #364E68;
+
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+
+  --bg-grid-pattern: linear-gradient(to right, #E2E6EC 1px, transparent 1px),
+    linear-gradient(to bottom, #E2E6EC 1px, transparent 1px);
+  --bg-grid-size: 16px 16px;
+
+  --radius: 0px;
+  /* Sharp corners for textbook feel */
+  --radius-sm: 0px;
+
+  --font-serif: 'EB Garamond', serif;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Grounding Dark (Contrast) */
+  --bg-dark-grounding: #000000;
+  --bg-dark-surface: #0A0A0A;
+
+  --header-height: 4rem;
+  --sidebar-width: 18rem;
+}
+
+/* 1. Global Resets */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+/* 2. Institutional Typography Classes */
+.serif {
+  font-family: var(--font-serif);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.sans {
+  font-family: var(--font-sans);
+}
+
+.type-l1 {
+  font-size: 2.25rem;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* More elegant L1 */
+.type-l2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* More elegant L2 */
+.type-l3 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.type-label {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+.type-label-bold {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+}
+
+.type-body {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.text-mono-sm {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 3. Specialized Layout Utilities */
+.bg-grid {
+  background-image: var(--bg-grid-pattern);
+  background-size: var(--bg-grid-size);
+}
+
+.border-academic {
+  border: 1px solid var(--border);
+}
+
+.border-b-academic {
+  border-bottom: 1px solid var(--border);
+}
+
+.border-r-academic {
+  border-right: 1px solid var(--border);
+}
+
+.border-l-academic {
+  border-left: 1px solid var(--border);
+}
+
+#root {
+  height: 100%;
+}
+
+/* 2. Structured Shell Architecture */
+.shell-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-main);
+}
+
+.shell-header {
+  height: var(--header-height);
+  flex-shrink: 0;
+  z-index: 50;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 4rem;
+  position: sticky;
+  top: 0;
+}
+
+.shell-body {
+  flex: 1;
+  display: flex;
+}
+
+.shell-sidebar {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  background: var(--bg-sidebar);
+  height: calc(100vh - var(--header-height));
+  position: sticky;
+  top: var(--header-height);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.shell-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-main);
+  position: relative;
+}
+
+.content-viewport {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 3rem 4rem;
+  /* Reduced top padding */
+  scroll-behavior: smooth;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.shell-footer {
+  flex-shrink: 0;
+  background: var(--bg-dark-grounding);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+  z-index: 30;
+  position: relative;
+  /* Set positioning context for handle */
+}
+
+.grounded-dark {
+  background: var(--bg-dark-grounding);
+  box-shadow: inset 0 2px 15px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  position: relative;
+  /* Container for handle */
+}
+
+/* Vertical Resize Handle */
+.resize-handle-v {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  cursor: ns-resize;
+  background: transparent;
+  transition: all 0.2s;
+  z-index: 100;
+}
+
+.resize-handle-v:hover {
+  background: rgba(var(--primary-rgb, 0, 102, 255), 0.1);
+}
+
+.resize-handle-v::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  transition: all 0.2s;
+}
+
+.resize-handle-v:hover::after {
+  background: #3b82f6;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+.resize-handle-h {
+  position: relative;
+  width: 6px;
+  cursor: ew-resize;
+  background: transparent;
+  transition: all 0.2s;
+  z-index: 100;
+  flex-shrink: 0;
+  margin-left: -3px;
+  margin-right: -3px;
+}
+
+.resize-handle-h:hover {
+  background: rgba(var(--primary-rgb, 0, 102, 255), 0.1);
+}
+
+.resize-handle-h::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 3px;
+  width: 2px;
+  background: transparent;
+  transition: all 0.2s;
+}
+
+.resize-handle-h:hover::after {
+  background: #3b82f6;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+/* 3. Academic Components */
+.academic-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  /* Reduced from 2rem */
+  transition: border-color 0.2s ease;
+}
+
+.academic-card:hover {
+  border-color: var(--primary);
+}
+
+.progress-bar-minimal {
+  height: 4px;
+  width: 100%;
+  background: var(--border);
+  border-radius: 0px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--primary);
+}
+
+/* Navigation */
+.sidebar-nav-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 3rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 3rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-left: 3px solid transparent;
+}
+
+.nav-item:hover {
+  color: var(--text-main);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.nav-item.active {
+  color: var(--primary);
+  background: rgba(0, 0, 0, 0.01);
+  border-left-color: var(--primary);
+  font-weight: 600;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-outline {
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  background: var(--bg-surface);
+}
+
+.btn-outline:hover {
+  background: var(--bg-main);
+  border-color: var(--text-muted);
+}
+
+/* 4. UTILITY FRAMEWORK */
+
+/* Layout */
+.flex {
+  display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.z-30 {
+  z-index: 30;
+}
+
+.z-40 {
+  z-index: 40;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+.z-100 {
+  z-index: 100;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Spacing - Gap */
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-5 {
+  gap: 1.25rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+.gap-10 {
+  gap: 2.5rem;
+}
+
+.gap-12 {
+  gap: 3rem;
+}
+
+.gap-16 {
+  gap: 4rem;
+}
+
+/* Spacing - Margin */
+.m-0 {
+  margin: 0;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.mt-12 {
+  margin-top: 3rem;
+}
+
+.mt-16 {
+  margin-top: 4rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
+.ml-4 {
+  margin-left: 1rem;
+}
+
+.mr-4 {
+  margin-right: 1rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.-mx-8 {
+  margin-left: -2rem;
+  margin-right: -2rem;
+}
+
+.-mb-8 {
+  margin-bottom: -2rem;
+}
+
+/* Spacing - Padding */
+.p-0 {
+  padding: 0;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.p-8 {
+  padding: 2rem;
+}
+
+.p-10 {
+  padding: 2.5rem;
+}
+
+.p-12 {
+  padding: 3rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.px-10 {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+.px-12 {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.py-2\.5 {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.pb-4 {
+  padding-bottom: 1rem;
+}
+
+.pb-6 {
+  padding-bottom: 1.5rem;
+}
+
+.pb-20 {
+  padding-bottom: 5rem;
+}
+
+.pb-32 {
+  padding-bottom: 8rem;
+}
+
+.pb-64 {
+  padding-bottom: 16rem;
+}
+
+.pt-8 {
+  padding-top: 2rem;
+}
+
+/* Stack Utilities (Space between) */
+.space-y-1 \u003e *+* {
+  margin-top: 0.25rem;
+}
+
+.space-y-2 \u003e *+* {
+  margin-top: 0.5rem;
+}
+
+.space-y-4 \u003e *+* {
+  margin-top: 1rem;
+}
+
+.space-y-6 \u003e *+* {
+  margin-top: 1.5rem;
+}
+
+.space-y-8 \u003e *+* {
+  margin-top: 2rem;
+}
+
+.space-y-10 \u003e *+* {
+  margin-top: 2.5rem;
+}
+
+.space-y-12 \u003e *+* {
+  margin-top: 3rem;
+}
+
+.space-y-16 \u003e *+* {
+  margin-top: 4rem;
+}
+
+.space-x-1 \u003e *+* {
+  margin-left: 0.25rem;
+}
+
+/* Typography */
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-base {
+  font-size: 1rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.text-3xl {
+  font-size: 1.5rem;
+}
+
+/* Scaled down */
+.text-4xl {
+  font-size: 1.75rem;
+}
+
+/* Scaled down from 2.25rem */
+.font-thin {
+  font-weight: 200;
+}
+
+.font-light {
+  font-weight: 300;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-extrabold {
+  font-weight: 800;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.tracking-tighter {
+  letter-spacing: -0.05em;
+}
+
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
+
+.tracking-wide {
+  letter-spacing: 0.025em;
+}
+
+.tracking-widest {
+  letter-spacing: 0.1em;
+}
+
+.tracking-\[0\.2em\] {
+  letter-spacing: 0.2em;
+}
+
+.tracking-\[0\.25em\] {
+  letter-spacing: 0.25em;
+}
+
+.tracking-\[0\.3em\] {
+  letter-spacing: 0.3em;
+}
+
+.tracking-\[0\.4em\] {
+  letter-spacing: 0.4em;
+}
+
+.leading-none {
+  line-height: 1;
+}
+
+.leading-tight {
+  line-height: 1.25;
+}
+
+.leading-relaxed {
+  line-height: 1.625;
+}
+
+.leading-6 {
+  line-height: 1.5rem;
+}
+
+/* Colors */
+.text-primary {
+  color: var(--primary);
+}
+
+.text-text-main {
+  color: var(--text-main);
+}
+
+.text-text-muted {
+  color: var(--text-muted);
+}
+
+.text-white {
+  color: white;
+}
+
+.text-white\/20 {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.text-white\/30 {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.text-white\/50 {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.text-white\/60 {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.text-white\/80 {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.text-emerald-700 {
+  color: #047857;
+}
+
+.bg-white {
+  background-color: #FFFFFF;
+}
+
+.bg-black {
+  background-color: #000000;
+}
+
+.bg-bg-main {
+  background-color: var(--bg-main);
+}
+
+.bg-bg-main\/10 {
+  background-color: rgba(253, 253, 251, 0.1);
+}
+
+.bg-bg-main\/20 {
+  background-color: rgba(253, 253, 251, 0.2);
+}
+
+.bg-bg-main\/30 {
+  background-color: rgba(253, 253, 251, 0.3);
+}
+
+.bg-bg-surface {
+  background-color: var(--bg-surface);
+}
+
+/* .bg-primary {
+  background-color: var(--primary);
+} */
+
+.bg-primary\/5 {
+  background-color: rgba(54, 78, 104, 0.05);
+}
+
+.bg-primary\/10 {
+  background-color: rgba(54, 78, 104, 0.1);
+}
+
+.bg-emerald-50 {
+  background-color: #ecfdf5;
+}
+
+/* Borders */
+.border {
+  border: 1px solid var(--border);
+}
+
+.border-b {
+  border-bottom: 1px solid var(--border);
+}
+
+.border-t {
+  border-top: 1px solid var(--border);
+}
+
+.border-r {
+  border-right: 1px solid var(--border);
+}
+
+.border-l {
+  border-left: 1px solid var(--border);
+}
+
+.border-border {
+  border-color: var(--border);
+}
+
+.border-primary {
+  border-color: var(--primary);
+}
+
+.border-primary\/10 {
+  border-color: rgba(54, 78, 104, 0.1);
+}
+
+.border-primary\/20 {
+  border-color: rgba(54, 78, 104, 0.2);
+}
+
+.border-primary\/30 {
+  border-color: rgba(54, 78, 104, 0.3);
+}
+
+.border-primary\/40 {
+  border-color: rgba(54, 78, 104, 0.4);
+}
+
+.border-emerald-100\/50 {
+  border-color: rgba(209, 250, 229, 0.5);
+}
+
+.border-white\/5 {
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.border-white\/10 {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.border-l-4 {
+  border-left-width: 4px;
+}
+
+.border-l-primary {
+  border-left-color: var(--primary);
+}
+
+/* Sizing */
+.w-1\.5 {
+  width: 0.375rem;
+}
+
+.w-2 {
+  width: 0.5rem;
+}
+
+.w-4 {
+  width: 1rem;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
+.w-8 {
+  width: 2rem;
+}
+
+.w-12 {
+  width: 3rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-px {
+  height: 1px;
+}
+
+.h-0\.5 {
+  height: 0.125rem;
+}
+
+.h-1 {
+  height: 0.25rem;
+}
+
+.h-1\.5 {
+  height: 0.375rem;
+}
+
+.h-2 {
+  height: 0.5rem;
+}
+
+.h-3 {
+  height: 0.75rem;
+}
+
+.h-4 {
+  height: 1rem;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-11 {
+  height: 2.75rem;
+}
+
+.h-12 {
+  height: 3rem;
+}
+
+.h-16 {
+  height: 4rem;
+}
+
+.h-20 {
+  height: 5.5rem;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.min-h-0 {
+  min-height: 0;
+}
+
+.max-w-xl {
+  max-width: 36rem;
+}
+
+.max-w-2xl {
+  max-width: 42rem;
+}
+
+.max-w-\[320px\] {
+  max-width: 320px;
+}
+
+.max-w-\[360px\] {
+  max-width: 360px;
+}
+
+.max-w-\[1200px\] {
+  max-width: 1200px;
+}
+
+.min-w-\[240px\] {
+  min-width: 240px;
+}
+
+.min-w-\[280px\] {
+  min-width: 280px;
+}
+
+.min-w-\[360px\] {
+  min-width: 360px;
+}
+
+.w-\[280px\] {
+  width: 280px;
+}
+
+.w-\[480px\] {
+  width: 480px;
+}
+
+/* Effects */
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.rounded-sm {
+  border-radius: 0.125rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.opacity-30 {
+  opacity: 0.3;
+}
+
+.opacity-40 {
+  opacity: 0.4;
+}
+
+.opacity-50 {
+  opacity: 0.5;
+}
+
+.opacity-80 {
+  opacity: 0.8;
+}
+
+.group:hover .opacity-100 {
+  opacity: 1;
+}
+
+.selection\:bg-primary\/10 ::selection {
+  background-color: rgba(54, 78, 104, 0.1);
+}
+
+.selection\:text-primary ::selection {
+  color: var(--primary);
+}
+
+/* Scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model Architecture Builder - Training Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;family=Crimson+Pro:wght@600&amp;family=IBM+Plex+Sans:wght@400;500&amp;family=Fira+Code:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#3f9ae4",
+          "background-light": "#f6f7f8",
+          "background-dark": "#111a21",
+        },
+        fontFamily: {
+          "display": ["Public Sans"],
+          "heading": ["Crimson Pro", "serif"],
+          "body": ["IBM Plex Sans", "sans-serif"],
+          "mono": ["Fira Code", "monospace"],
+        },
+        borderRadius: {"DEFAULT": "0px", "sm": "0px", "md": "0px", "lg": "0px", "xl": "0px", "2xl": "0px", "3xl": "0px", "full": "0px"},
+      },
+    },
+  }
+</script>
+<style>
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background-color: #FFFFFF;
+    color: #2D3748;
+  }
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Crimson Pro', serif;
+  }
+  .font-mono {
+    font-family: 'Fira Code', monospace;
+  }
+  .border-thin {
+    border: 1px solid #E2E8F0;
+  }
+</style>
+</head>
+<body class="bg-white text-[#2D3748] min-h-screen flex flex-col">
+<!-- Top Navigation (Shared Component excluded due to focused view rule) -->
+<!-- Creating minimal header with back button -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#E2E8F0] px-10 py-3 bg-[#F7FAFC]">
+<div class="flex items-center gap-4 text-[#2D3748]">
+<button aria-label="Back to Workspace" class="flex items-center justify-center p-2 hover:bg-[#E2E8F0] transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="size-5 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.1739 20.1739L27.8261 5.82609C29.1366 7.13663 28.3989 10.1876 26.2002 13.7654C24.8538 15.9564 22.9595 18.3449 20.6522 20.6522C18.3449 22.9595 15.9564 24.8538 13.7654 26.2002C10.1876 28.3989 7.13663 29.1366 5.82609 27.8261L20.1739 42.1739C21.4845 43.4845 24.5355 42.7467 28.1133 40.548C30.3042 39.2016 32.6927 37.3073 35 35C37.3073 32.6927 39.2016 30.3042 40.548 28.1133C42.7467 24.5355 43.4845 21.4845 42.1739 20.1739Z" fill="currentColor"></path>
+<path clip-rule="evenodd" d="M7.24189 26.4066C7.31369 26.4411 7.64204 26.5637 8.52504 26.3738C9.59462 26.1438 11.0343 25.5311 12.7183 24.4963C14.7583 23.2426 17.0256 21.4503 19.238 19.238C21.4503 17.0256 23.2426 14.7583 24.4963 12.7183C25.5311 11.0343 26.1438 9.59463 26.3738 8.52504C26.5637 7.64204 26.4411 7.31369 26.4066 7.24189C26.345 7.21246 26.143 7.14535 25.6664 7.1918C24.9745 7.25925 23.9954 7.5498 22.7699 8.14278C20.3369 9.32007 17.3369 11.4915 14.4142 14.4142C11.4915 17.3369 9.32007 20.3369 8.14278 22.7699C7.5498 23.9954 7.25925 24.9745 7.1918 25.6664C7.14534 26.143 7.21246 26.345 7.24189 26.4066ZM29.9001 10.7285C29.4519 12.0322 28.7617 13.4172 27.9042 14.8126C26.465 17.1544 24.4686 19.6641 22.0664 22.0664C19.6641 24.4686 17.1544 26.465 14.8126 27.9042C13.4172 28.7617 12.0322 29.4519 10.7285 29.9001L21.5754 40.747C21.6001 40.7606 21.8995 40.931 22.8729 40.7217C23.9424 40.4916 25.3821 39.879 27.0661 38.8441C29.1062 37.5904 31.3734 35.7982 33.5858 33.5858C35.7982 31.3734 37.5904 29.1062 38.8441 27.0661C39.879 25.3821 40.4916 23.9425 40.7216 22.8729C40.931 21.8995 40.7606 21.6001 40.747 21.5754L29.9001 10.7285ZM29.2403 4.41187L43.5881 18.7597C44.9757 20.1473 44.9743 22.1235 44.6322 23.7139C44.2714 25.3919 43.4158 27.2666 42.252 29.1604C40.8128 31.5022 38.8165 34.012 36.4142 36.4142C34.012 38.8165 31.5022 40.8128 29.1604 42.252C27.2666 43.4158 25.3919 44.2714 23.7139 44.6322C22.1235 44.9743 20.1473 44.9757 18.7597 43.5881L4.41187 29.2403C3.29027 28.1187 3.08209 26.5973 3.21067 25.2783C3.34099 23.9415 3.8369 22.4852 4.54214 21.0277C5.96129 18.0948 8.43335 14.7382 11.5858 11.5858C14.7382 8.43335 18.0948 5.9613 21.0277 4.54214C22.4852 3.8369 23.9415 3.34099 25.2783 3.21067C26.5973 3.08209 28.1187 3.29028 29.2403 4.41187Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h1 class="text-[#2D3748] text-xl font-heading font-semibold leading-tight tracking-[-0.015em]">Model Architecture Builder</h1>
+</div>
+</header>
+<main class="flex-1 flex flex-col p-6 gap-6 max-w-7xl mx-auto w-full">
+<!-- Top Control Header -->
+<div class="flex flex-wrap items-center justify-between gap-4 border-b border-thin pb-4">
+<div>
+<h2 class="text-[#2D3748] font-heading text-[28px] font-semibold leading-tight">Training Analytics: Feedforward Neural Network</h2>
+<p class="text-[#A0AEC0] text-sm mt-1">Real-time performance monitoring and tensor evaluation.</p>
+</div>
+<button class="flex items-center justify-center h-10 px-6 border border-[#E53E3E] text-[#E53E3E] hover:bg-[#FEFCBF] hover:bg-opacity-20 transition-colors font-medium text-sm">
+<span class="material-symbols-outlined mr-2 text-[18px]" data-icon="stop_circle">stop_circle</span>
+      Halt Execution
+    </button>
+</div>
+<!-- Top Half: Line Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[400px]">
+<!-- Loss Chart -->
+<div class="border border-thin bg-[#F7FAFC] flex flex-col">
+<div class="p-4 border-b border-thin flex justify-between items-center bg-white">
+<h3 class="font-heading text-lg font-semibold text-[#2D3748]">Loss Curve</h3>
+<div class="flex gap-4 text-xs font-mono">
+<div class="flex items-center gap-2"><div class="w-3 h-[2px] bg-primary"></div> Train</div>
+<div class="flex items-center gap-2"><div class="w-3 h-[2px] bg-[#A0AEC0]"></div> Val</div>
+</div>
+</div>
+<div class="flex-1 p-4 relative" style="background-image: linear-gradient(#E2E8F0 1px, transparent 1px), linear-gradient(90deg, #E2E8F0 1px, transparent 1px); background-size: 40px 40px; background-position: -1px -1px;">
+<!-- Simulated D3 Chart Area -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M0,80 Q20,30 40,20 T80,10 L100,5" fill="none" stroke="#3f9ae4" stroke-width="1.5"></path>
+<path d="M0,85 Q20,40 40,35 T80,25 L100,20" fill="none" stroke="#A0AEC0" stroke-dasharray="2,2" stroke-width="1.5"></path>
+</svg>
+<div class="absolute bottom-4 left-4 text-xs font-mono text-[#A0AEC0]">Epochs</div>
+<div class="absolute top-4 left-4 text-xs font-mono text-[#A0AEC0] -rotate-90 origin-top-left transform translate-y-8">Loss</div>
+</div>
+</div>
+<!-- Accuracy Chart -->
+<div class="border border-thin bg-[#F7FAFC] flex flex-col">
+<div class="p-4 border-b border-thin flex justify-between items-center bg-white">
+<h3 class="font-heading text-lg font-semibold text-[#2D3748]">Accuracy Metrics</h3>
+<div class="flex gap-4 text-xs font-mono">
+<div class="flex items-center gap-2"><div class="w-3 h-[2px] bg-primary"></div> Train</div>
+<div class="flex items-center gap-2"><div class="w-3 h-[2px] bg-[#A0AEC0]"></div> Val</div>
+</div>
+</div>
+<div class="flex-1 p-4 relative" style="background-image: linear-gradient(#E2E8F0 1px, transparent 1px), linear-gradient(90deg, #E2E8F0 1px, transparent 1px); background-size: 40px 40px; background-position: -1px -1px;">
+<!-- Simulated D3 Chart Area -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M0,20 Q20,60 40,75 T80,85 L100,90" fill="none" stroke="#3f9ae4" stroke-width="1.5"></path>
+<path d="M0,15 Q20,50 40,65 T80,75 L100,80" fill="none" stroke="#A0AEC0" stroke-dasharray="2,2" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Middle: Metrics Table -->
+<div class="grid grid-cols-5 gap-4 py-2 border-y border-thin">
+<div class="flex flex-col text-center">
+<span class="text-xs text-[#A0AEC0] uppercase tracking-wider">Epoch</span>
+<span class="font-mono text-xl font-semibold">42 / 50</span>
+</div>
+<div class="flex flex-col text-center">
+<span class="text-xs text-[#A0AEC0] uppercase tracking-wider">Train Loss</span>
+<span class="font-mono text-xl text-primary">0.453</span>
+</div>
+<div class="flex flex-col text-center">
+<span class="text-xs text-[#A0AEC0] uppercase tracking-wider">Val Loss</span>
+<span class="font-mono text-xl">0.481</span>
+</div>
+<div class="flex flex-col text-center">
+<span class="text-xs text-[#A0AEC0] uppercase tracking-wider">Train Acc</span>
+<span class="font-mono text-xl text-[#48BB78]">81.2%</span>
+</div>
+<div class="flex flex-col text-center">
+<span class="text-xs text-[#A0AEC0] uppercase tracking-wider">Val Acc</span>
+<span class="font-mono text-xl text-[#48BB78]">79.5%</span>
+</div>
+</div>
+<!-- Bottom Half: Terminal Log -->
+<div class="flex-1 bg-[#1A202C] text-[#A0AEC0] font-mono text-sm p-4 overflow-y-auto border border-[#2D3748] min-h-[250px] flex flex-col">
+<div class="mb-4 text-[#718096]">
+      # Initializing training environment...<br/>
+      # Compiling model structure...<br/>
+      # Allocating tensors...
+    </div>
+<div class="space-y-1">
+<div>Epoch 38/50<br/>1875/1875 [==============================] - 5s 2ms/step - loss: 0.492 - accuracy: 0.791 - val_loss: 0.510 - val_accuracy: 0.780</div>
+<div>Epoch 39/50<br/>1875/1875 [==============================] - 4s 2ms/step - loss: 0.481 - accuracy: 0.798 - val_loss: 0.501 - val_accuracy: 0.785</div>
+<div>Epoch 40/50<br/>1875/1875 [==============================] - 5s 2ms/step - loss: 0.470 - accuracy: 0.803 - val_loss: 0.492 - val_accuracy: 0.788</div>
+<div>Epoch 41/50<br/>1875/1875 [==============================] - 4s 2ms/step - loss: 0.461 - accuracy: 0.808 - val_loss: 0.485 - val_accuracy: 0.792</div>
+<div class="text-[#E2E8F0]">Epoch 42/50<br/>1875/1875 [==============================] - 5s 2ms/step - loss: 0.453 - accuracy: 0.812 - val_loss: 0.481 - val_accuracy: 0.795</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-[#48BB78] text-[16px]" data-icon="check_circle">check_circle</span>
+<span class="text-[#48BB78]">Convergence trending stable. Continuing to Epoch 43...</span>
+</div>
+</div>
+<div class="mt-auto pt-4 flex gap-2 items-center text-[#718096]">
+<div class="w-2 h-4 bg-primary animate-pulse"></div>
+      Waiting for backpropagation step...
+    </div>
+</div>
+</main>
+</body></html>

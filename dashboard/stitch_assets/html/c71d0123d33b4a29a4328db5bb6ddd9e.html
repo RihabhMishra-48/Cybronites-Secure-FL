@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dataset Explorer - Distribution Visualizer</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&amp;family=IBM+Plex+Sans:wght@400;500&amp;family=Libre+Baskerville:wght@400;700&amp;family=Inter:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3f9ae4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111a21",
+                        "surface": "#F7FAFC",
+                        "text-main": "#2D3748",
+                        "muted": "#A0AEC0",
+                        "success": "#48BB78",
+                        "warning": "#ED8936",
+                        "border-main": "#E2E8F0",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "heading": ["'Libre Baskerville'", "serif"],
+                        "data": ["'IBM Plex Sans'", "sans-serif"],
+                        "mono": ["'IBM Plex Mono'", "monospace"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'IBM Plex Sans', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Libre Baskerville', serif; }
+        .font-mono { font-family: 'IBM Plex Mono', monospace; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-white text-text-main min-h-screen flex flex-col antialiased">
+<!-- Shared TopNavBar -->
+<div class="relative flex h-auto w-full flex-col bg-white group/design-root overflow-x-hidden border-b border-border-main" style='font-family: Inter, "Noto Sans", sans-serif;'>
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-8 md:px-16 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col w-full max-w-[1200px] flex-1">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f2f4] px-0 py-3 mb-6">
+<div class="flex items-center gap-4 text-[#111517]">
+<div class="size-4">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H6V17.3333V30.6667H24V44H42V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-[#111517] text-lg font-bold leading-tight tracking-[-0.015em] font-heading">Dataset Explorer</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-muted hover:text-text-main text-sm font-medium leading-normal transition-colors" href="#">Dataset Overview</a>
+<a class="text-muted hover:text-text-main text-sm font-medium leading-normal transition-colors" href="#">Tabular Inspector</a>
+<a class="text-primary text-sm font-bold leading-normal border-b-2 border-primary pb-1" href="#">Distribution Visualizer</a>
+<a class="text-muted hover:text-text-main text-sm font-medium leading-normal transition-colors" href="#">Preprocessing Pipeline</a>
+</div>
+</div>
+</header>
+<div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+<div class="flex flex-col gap-2">
+<p class="text-muted text-sm font-data">Dataset: MIMIC-III Clinical Database</p>
+<h1 class="text-text-main font-heading text-[28px] font-bold leading-tight border-b border-border-main pb-2 inline-block">Distribution Visualizer</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-6">
+<div class="flex flex-col">
+<span class="text-muted text-xs font-data uppercase tracking-wider mb-1">Total Samples</span>
+<span class="font-mono text-xl font-medium">42,109</span>
+</div>
+<div class="w-px h-10 bg-border-main"></div>
+<div class="flex flex-col">
+<span class="text-muted text-xs font-data uppercase tracking-wider mb-1">Gini Coefficient</span>
+<span class="font-mono text-xl font-medium">0.42</span>
+</div>
+</div>
+<button class="flex cursor-pointer items-center justify-center overflow-hidden h-8 px-4 bg-primary text-white hover:bg-blue-600 transition-colors text-sm font-medium leading-normal gap-2 ml-4 shadow-sm border border-transparent">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span class="truncate">Download PDF Report</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content Area -->
+<main class="flex-1 w-full max-w-[1200px] mx-auto px-8 md:px-16 py-8 flex flex-col gap-8 bg-white">
+<!-- Target Histogram (Full Width) -->
+<section class="w-full border border-border-main p-4 bg-white">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-heading text-[18px] font-bold text-text-main">Target Variable: Mortality (Class Balance)</h3>
+<div class="flex items-center gap-2">
+<span class="block w-3 h-3 bg-primary"></span>
+<span class="text-xs font-data text-muted">Frequency</span>
+</div>
+</div>
+<div class="relative h-64 w-full flex items-end gap-16 px-12 pt-8 pb-8 border-b border-l border-border-main">
+<!-- Y-axis labels -->
+<div class="absolute left-[-40px] top-0 bottom-8 flex flex-col justify-between items-end text-muted font-mono text-xs pr-2">
+<span>30k</span>
+<span>20k</span>
+<span>10k</span>
+<span>0</span>
+</div>
+<!-- Grid Lines -->
+<div class="absolute inset-0 bottom-8 left-12 right-0 flex flex-col justify-between pointer-events-none">
+<div class="w-full border-t border-border-main border-dashed opacity-50"></div>
+<div class="w-full border-t border-border-main border-dashed opacity-50"></div>
+<div class="w-full border-t border-border-main border-dashed opacity-50"></div>
+<div class="w-full border-t border-transparent"></div> <!-- Base line handled by container -->
+</div>
+<!-- Bar 1: Survived -->
+<div class="relative w-full max-w-[120px] bg-primary group flex flex-col justify-end items-center mx-auto" style="height: 85%;">
+<div class="absolute -bottom-8 text-sm font-mono text-text-main">0 (Survived)</div>
+</div>
+<!-- Bar 2: Deceased (Imbalanced) with Tooltip Example -->
+<div class="relative w-full max-w-[120px] bg-primary group flex flex-col justify-end items-center mx-auto" style="height: 15%;">
+<div class="absolute -bottom-8 text-sm font-mono text-text-main">1 (Deceased)</div>
+<!-- Tooltip (Simulating Hover State) -->
+<div class="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-text-main text-white px-3 py-2 text-xs font-mono whitespace-nowrap z-10 flex flex-col items-center shadow-md">
+<span>Count: 6,316</span>
+<span class="text-muted">15.0% of total</span>
+<div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-text-main rotate-45"></div>
+</div>
+</div>
+</div>
+<!-- Imbalance Warning -->
+<div class="mt-8 p-3 bg-orange-50 border-l-4 border-warning flex items-start gap-3">
+<span class="material-symbols-outlined text-warning text-[20px] mt-0.5" data-icon="warning">warning</span>
+<div>
+<h4 class="text-sm font-bold text-text-main mb-1">Significant Class Imbalance Detected</h4>
+<p class="text-xs text-text-main font-data">The target variable exhibits a 15:85 minority-to-majority class ratio. Consider applying oversampling (e.g., SMOTE) or adjusting class weights in the preprocessing pipeline.</p>
+</div>
+</div>
+</section>
+<!-- Continuous Features Grid (2x2) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+<!-- Feature 1: Age -->
+<div class="border border-border-main p-4 bg-white flex flex-col h-[320px]">
+<h3 class="font-heading text-[18px] font-bold text-text-main mb-4 truncate">Feature: Age (Continuous)</h3>
+<div class="relative flex-1 flex items-end gap-1 px-8 pb-6 border-b border-l border-border-main pt-4">
+<!-- Y-axis labels -->
+<div class="absolute left-[-35px] top-4 bottom-6 flex flex-col justify-between items-end text-muted font-mono text-[10px] pr-2">
+<span>5k</span>
+<span>2.5k</span>
+<span>0</span>
+</div>
+<!-- Histogram Bars (Simulated Distribution) -->
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 5%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 12%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 25%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 45%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 60%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 80%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 95%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 100%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 85%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 65%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 40%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 20%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 8%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 3%;"></div>
+<!-- X-axis labels -->
+<div class="absolute -bottom-6 left-8 right-0 flex justify-between text-[10px] font-mono text-muted">
+<span>18</span>
+<span>50</span>
+<span>89</span>
+</div>
+</div>
+</div>
+<!-- Feature 2: Heart Rate -->
+<div class="border border-border-main p-4 bg-white flex flex-col h-[320px]">
+<h3 class="font-heading text-[18px] font-bold text-text-main mb-4 truncate">Feature: Heart Rate (BPM)</h3>
+<div class="relative flex-1 flex items-end gap-1 px-8 pb-6 border-b border-l border-border-main pt-4">
+<!-- Y-axis labels -->
+<div class="absolute left-[-35px] top-4 bottom-6 flex flex-col justify-between items-end text-muted font-mono text-[10px] pr-2">
+<span>8k</span>
+<span>4k</span>
+<span>0</span>
+</div>
+<!-- Histogram Bars (Simulated Normal Distribution) -->
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 2%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 5%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 15%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 35%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 65%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 90%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 100%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 85%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 55%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 25%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 10%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 4%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 1%;"></div>
+<!-- X-axis labels -->
+<div class="absolute -bottom-6 left-8 right-0 flex justify-between text-[10px] font-mono text-muted">
+<span>40</span>
+<span>85</span>
+<span>160</span>
+</div>
+</div>
+</div>
+<!-- Feature 3: Blood Pressure -->
+<div class="border border-border-main p-4 bg-white flex flex-col h-[320px]">
+<h3 class="font-heading text-[18px] font-bold text-text-main mb-4 truncate">Feature: Sys BP (mmHg)</h3>
+<div class="relative flex-1 flex items-end gap-1 px-8 pb-6 border-b border-l border-border-main pt-4">
+<!-- Y-axis labels -->
+<div class="absolute left-[-35px] top-4 bottom-6 flex flex-col justify-between items-end text-muted font-mono text-[10px] pr-2">
+<span>6k</span>
+<span>3k</span>
+<span>0</span>
+</div>
+<!-- Histogram Bars (Right Skewed) -->
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 8%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 20%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 50%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 100%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 80%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 60%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 45%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 30%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 20%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 12%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 8%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 4%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 2%;"></div>
+<!-- X-axis labels -->
+<div class="absolute -bottom-6 left-8 right-0 flex justify-between text-[10px] font-mono text-muted">
+<span>60</span>
+<span>120</span>
+<span>220</span>
+</div>
+</div>
+</div>
+<!-- Feature 4: Glucose Levels -->
+<div class="border border-border-main p-4 bg-white flex flex-col h-[320px]">
+<h3 class="font-heading text-[18px] font-bold text-text-main mb-4 truncate">Feature: Glucose (mg/dL)</h3>
+<div class="relative flex-1 flex items-end gap-1 px-8 pb-6 border-b border-l border-border-main pt-4">
+<!-- Y-axis labels -->
+<div class="absolute left-[-35px] top-4 bottom-6 flex flex-col justify-between items-end text-muted font-mono text-[10px] pr-2">
+<span>12k</span>
+<span>6k</span>
+<span>0</span>
+</div>
+<!-- Histogram Bars (Long tail) -->
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 15%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 45%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 100%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 60%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 30%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 15%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 10%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 7%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 5%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 3%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 2%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 1%;"></div>
+<div class="w-full bg-primary/80 hover:bg-primary transition-colors" style="height: 1%;"></div>
+<!-- X-axis labels -->
+<div class="absolute -bottom-6 left-8 right-0 flex justify-between text-[10px] font-mono text-muted">
+<span>50</span>
+<span>150</span>
+<span>400+</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

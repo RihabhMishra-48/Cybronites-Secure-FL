@@ -1,0 +1,191 @@
+# Model Architecture Builder
+
+## Product Overview
+
+**The Pitch:** A structured, textbook-inspired interface for AI/ML students to design, configure, and understand neural network architectures. It bridges the gap between mathematical theory and practical code by pairing layer configuration with live LaTeX formula rendering.
+
+**For:** Computer science students and machine learning beginners who need to visualize network topology alongside the underlying mathematical operations.
+
+**Device:** desktop
+
+**Design Direction:** Academic clean. Reminiscent of modern digital textbooks and academic journals. Crisp lines, high-contrast typography, mathematical rigor over flashy UI.
+
+**Inspired by:** Distill.pub, Overleaf, JupyterLab
+
+---
+
+## Screens
+
+- **Curriculum Dashboard:** List of assigned modeling tasks and theoretical concepts.
+- **Architecture Workspace:** The main grid interface for stacking and connecting network layers.
+- **Layer Inspector:** Detail panel exposing the mathematical formulas and hyperparameters for a selected layer.
+- **Training Analytics:** Real-time rendering of loss curves and accuracy metrics during the training phase.
+
+---
+
+## Key Flows
+
+**Construct a Sequential Model:** User builds a basic feedforward network.
+
+1. User is on **Architecture Workspace** -> sees empty grid and layer palette
+2. User clicks **Add Layer** -> inserts a `Dense` block into the grid
+3. User selects the block -> opens **Layer Inspector**
+4. User adjusts `units: 64` and selects `Activation: ReLU` -> LaTeX block updates to $f(x) = \max(0, x)$
+
+---
+
+<details>
+<summary>Design System</summary>
+
+## Color Palette
+
+- **Primary:** `#4299E1` - Action buttons, active layer borders, focal links
+- **Background:** `#FFFFFF` - Main canvas, absolute clean slate
+- **Surface:** `#F7FAFC` - Secondary panels, math blocks, layer cards
+- **Text:** `#2D3748` - Deep charcoal for maximum readability
+- **Muted:** `#A0AEC0` - Grid lines, placeholders, inactive states
+- **Accent:** `#48BB78` - Success states, converged metrics
+- **Warning:** `#ED8936` - Vanishing gradient warnings
+
+## Typography
+
+- **Headings:** `Crimson Pro`, 600, 24-32px
+- **Body:** `IBM Plex Sans`, 400, 15px
+- **Math/Code:** `Fira Code`, 400, 14px
+- **Buttons:** `IBM Plex Sans`, 500, 14px
+
+**Style notes:** 0px border radius on all elements to mimic print layout. 1px solid borders (`#E2E8F0`) instead of drop shadows. High reliance on whitespace and typographic hierarchy.
+
+## Design Tokens
+
+```css
+:root {
+  --color-primary: #4299E1;
+  --color-background: #FFFFFF;
+  --color-surface: #F7FAFC;
+  --color-text: #2D3748;
+  --font-heading: 'Crimson Pro', serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+  --radius: 0px;
+  --spacing-base: 8px;
+  --border-thin: 1px solid #E2E8F0;
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>Screen Specifications</summary>
+
+### Curriculum Dashboard
+
+**Purpose:** Entry point for students to select their assignment.
+
+**Layout:** Split vertically. Left 25% for syllabus navigation, right 75% for assignment details.
+
+**Key Elements:**
+- **Syllabus Nav:** `250px` width, list of modules (e.g., "Module 1: Perceptrons"). 
+- **Assignment Card:** `600px` max-width, contains problem statement and dataset overview.
+- **Start Button:** Primary blue `#4299E1`, sharp corners, labeled `Initialize Environment`.
+
+**States:**
+- **Empty:** "No active assignments. Review syllabus."
+- **Completed:** Green checkmark `#48BB78` next to module name.
+
+**Components:**
+- **Module Item:** `16px` padding, bottom border `--border-thin`, hover background `#F7FAFC`.
+
+**Interactions:**
+- **Click Module:** Loads assignment details in right pane instantly.
+- **Hover Start Button:** Background dims to `#3182CE`.
+
+**Responsive:**
+- **Desktop:** Split view.
+- **Tablet:** Single column, syllabus stacks above details.
+- **Mobile:** Not supported (Desktop targeted).
+
+### Architecture Workspace
+
+**Purpose:** The grid-based canvas where layers are assembled.
+
+**Layout:** Top header for model controls. Left 20% layer palette, center 55% grid canvas, right 25% inspector panel.
+
+**Key Elements:**
+- **Layer Palette:** Draggable chips for `Dense`, `Conv2D`, `MaxPooling`, `Dropout`.
+- **Grid Canvas:** Graph paper background pattern. Stacking interface for layers.
+- **Compile Button:** Top right, `#4299E1` background, evaluates model validity.
+
+**States:**
+- **Empty Canvas:** "Drag layers from the palette to construct $f(x)$."
+- **Invalid Model:** Red outline `#E53E3E` on disconnected or mismatched tensor shapes.
+
+**Components:**
+- **Layer Node:** `200px` wide, `48px` high, white background, solid border, input/output shape badges.
+
+**Interactions:**
+- **Drag Layer:** Snaps to grid with `16px` increments.
+- **Hover Node:** Shows dimension transformation (e.g., `(None, 28, 28) -> (None, 128)`).
+
+### Layer Inspector
+
+**Purpose:** Modify hyperparameters and view the underlying mathematical formulation of the selected layer.
+
+**Layout:** Fixed right sidebar, stacks vertically: Title, Parameters, Math Equation.
+
+**Key Elements:**
+- **Title Block:** Layer name (e.g., `Dense Layer`), Crimson Pro, 24px.
+- **Parameter Dropdowns:** Select inputs for `units`, `activation`, `kernel_initializer`.
+- **LaTeX Block:** Gray surface `#F7FAFC`, displays raw math (e.g., $y = Wx + b$).
+
+**States:**
+- **Empty:** "Select a layer to view its mathematical formulation."
+- **Configured:** LaTeX auto-updates based on parameter changes.
+
+**Components:**
+- **Number Input:** `IBM Plex Sans`, strict integer validation, up/down arrows.
+- **Math Surface:** `padding: 16px`, font `Fira Code`, centered math rendering.
+
+**Interactions:**
+- **Change Activation:** Switching to `Sigmoid` instantly updates the LaTeX block to $\sigma(x) = \frac{1}{1 + e^{-x}}$.
+
+### Training Analytics
+
+**Purpose:** Visual feedback loop during backpropagation.
+
+**Layout:** 50/50 vertical split. Top: Line charts. Bottom: Epoch logs in a terminal-style block.
+
+**Key Elements:**
+- **Loss Curve:** Dual-line chart (Train vs. Val), primary blue and muted gray lines.
+- **Metrics Table:** Live updating grid showing `Epoch`, `Loss`, `Accuracy`.
+- **Terminal Log:** Black background `#1A202C`, monospace text `#A0AEC0`, auto-scrolling.
+
+**States:**
+- **Loading:** "Allocating tensors..."
+- **Complete:** "Convergence reached at Epoch 42", green text highlight.
+
+**Components:**
+- **Chart Area:** `400px` height, D3/Chart.js container, minimal grid lines.
+- **Stop Button:** `#E53E3E` border, transparent background, text `Halt Execution`.
+
+**Interactions:**
+- **Hover Chart:** Tooltip displaying exact loss value at specific epoch.
+
+</details>
+
+---
+
+<details>
+<summary>Build Guide</summary>
+
+**Stack:** HTML + Tailwind CSS v3
+
+**Build Order:**
+1. **Design System & Typography Setup** - Establish the academic serif/sans/mono hierarchy and CSS variables.
+2. **Architecture Workspace Canvas** - Build the complex grid and layer nodes first, as it dictates the layout logic.
+3. **Layer Inspector** - Implement the sidebar, parameter inputs, and integrate a LaTeX rendering library (like KaTeX) for the math blocks.
+4. **Curriculum Dashboard & Training Analytics** - Build the bookend screens (entry and exit points of the core flow).
+
+</details>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard - Academic Clean</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#16559c",
+              "background-light": "#f6f7f8",
+              "background-dark": "#111921",
+            },
+            fontFamily: {
+              "display": ["Public Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background-light text-[#1c1e21] font-display antialiased min-h-screen flex">
+<!-- Shared SideNavBar -->
+<div class="relative flex h-auto min-h-screen w-64 flex-col bg-[#fdfdfb] border-r border-[#e2e6ec] shrink-0">
+<div class="flex h-full flex-col justify-between p-4 pt-10">
+<div class="flex flex-col gap-8">
+<div class="flex flex-col gap-1 px-3">
+<h1 class="text-[#1c1e21] text-xl font-bold leading-normal">Academic Clean</h1>
+<p class="text-[#828c9a] text-sm font-normal leading-normal">Coursework</p>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 border-l-2 border-primary bg-primary/5" href="#">
+<p class="text-primary text-sm font-medium leading-normal">Chapter 1: Linear Regression</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 border-l-2 border-transparent hover:bg-gray-50 transition-colors group" href="#">
+<p class="text-[#828c9a] group-hover:text-[#1c1e21] text-sm font-medium leading-normal transition-colors">Chapter 2: Neural Networks</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 border-l-2 border-transparent hover:bg-gray-50 transition-colors group" href="#">
+<p class="text-[#828c9a] group-hover:text-[#1c1e21] text-sm font-medium leading-normal transition-colors">Chapter 3: CNNs</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 border-l-2 border-transparent hover:bg-gray-50 transition-colors group" href="#">
+<p class="text-[#828c9a] group-hover:text-[#1c1e21] text-sm font-medium leading-normal transition-colors">Chapter 4: RNNs</p>
+</a>
+</nav>
+</div>
+<!-- Bottom settings/user area could go here -->
+<div class="px-3 py-4 border-t border-[#e2e6ec] mt-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#828c9a] text-sm">person</span>
+<p class="text-[#828c9a] text-sm font-medium">Student Portal</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto">
+<div class="mx-auto max-w-[960px] px-8 pt-[120px] pb-24 flex flex-col gap-12">
+<!-- Progress Header -->
+<header class="flex flex-col gap-6 max-w-2xl">
+<div class="flex flex-col gap-2">
+<h2 class="text-[#1c1e21] text-[40px] font-semibold leading-tight tracking-tight">Academic Progress</h2>
+<p class="text-[#828c9a] text-lg font-normal leading-relaxed">Welcome back to your coursework. Resume your training environments below.</p>
+</div>
+<div class="flex flex-col gap-2 pt-4">
+<div class="flex justify-between items-end">
+<p class="text-[#1c1e21] text-sm font-medium">Overall Completion</p>
+<p class="text-[#828c9a] text-sm font-medium">35%</p>
+</div>
+<div class="h-1.5 w-full bg-[#e2e6ec] rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 35%;"></div>
+</div>
+</div>
+</header>
+<!-- Recent Experiments Section -->
+<section class="flex flex-col gap-6">
+<div class="flex items-center justify-between border-b border-[#e2e6ec] pb-4">
+<h3 class="text-[#1c1e21] text-xl font-medium">Recent Experiments</h3>
+<button class="text-primary text-sm font-medium hover:underline flex items-center gap-1">
+                        View All logs <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<!-- Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Experiment Card 1 -->
+<a class="flex flex-col justify-between p-5 h-[120px] bg-white border border-[#e2e6ec] rounded hover:border-primary transition-colors cursor-pointer group shadow-sm hover:shadow-md" href="#">
+<div class="flex justify-between items-start">
+<h4 class="text-[#1c1e21] font-medium text-base truncate pr-2">CNN - CIFAR10</h4>
+<span class="material-symbols-outlined text-[#828c9a] group-hover:text-primary text-sm transition-colors">monitoring</span>
+</div>
+<div class="flex flex-col gap-1 mt-auto">
+<p class="text-[#828c9a] text-xs font-mono">Final Loss: <span class="text-[#1c1e21]">0.041</span></p>
+<p class="text-[#828c9a] text-xs">Last run: Oct 24, 14:30</p>
+</div>
+</a>
+<!-- Experiment Card 2 -->
+<a class="flex flex-col justify-between p-5 h-[120px] bg-white border border-[#e2e6ec] rounded hover:border-primary transition-colors cursor-pointer group shadow-sm hover:shadow-md" href="#">
+<div class="flex justify-between items-start">
+<h4 class="text-[#1c1e21] font-medium text-base truncate pr-2">ResNet50 Fine-tune</h4>
+<span class="material-symbols-outlined text-[#828c9a] group-hover:text-primary text-sm transition-colors">monitoring</span>
+</div>
+<div class="flex flex-col gap-1 mt-auto">
+<p class="text-[#828c9a] text-xs font-mono">Final Loss: <span class="text-[#1c1e21]">0.128</span></p>
+<p class="text-[#828c9a] text-xs">Last run: Oct 22, 09:15</p>
+</div>
+</a>
+<!-- Experiment Card 3 -->
+<a class="flex flex-col justify-between p-5 h-[120px] bg-white border border-[#e2e6ec] rounded hover:border-primary transition-colors cursor-pointer group shadow-sm hover:shadow-md" href="#">
+<div class="flex justify-between items-start">
+<h4 class="text-[#1c1e21] font-medium text-base truncate pr-2">Linear Reg Baseline</h4>
+<span class="material-symbols-outlined text-[#828c9a] group-hover:text-primary text-sm transition-colors">monitoring</span>
+</div>
+<div class="flex flex-col gap-1 mt-auto">
+<p class="text-[#828c9a] text-xs font-mono">Final Loss: <span class="text-[#1c1e21]">1.402</span></p>
+<p class="text-[#828c9a] text-xs">Last run: Oct 18, 16:45</p>
+</div>
+</a>
+</div>
+<!-- Skeleton Loader Example (Hidden by default, shown for spec completion) -->
+<!-- 
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse opacity-60">
+                    <div class="h-[120px] bg-white border border-[#e2e6ec] rounded p-5 flex flex-col justify-between">
+                        <div class="h-4 bg-[#e2e6ec] rounded w-1/2"></div>
+                        <div class="space-y-2 mt-auto">
+                            <div class="h-3 bg-[#e2e6ec] rounded w-3/4"></div>
+                            <div class="h-3 bg-[#e2e6ec] rounded w-1/2"></div>
+                        </div>
+                    </div>
+                </div>
+                -->
+<!-- Empty State Example (Hidden by default, shown for spec completion) -->
+<!--
+                <div class="flex flex-col items-center justify-center py-16 px-4 text-center border border-dashed border-[#e2e6ec] rounded bg-white/50">
+                    <span class="material-symbols-outlined text-[#828c9a] text-4xl mb-4">science</span>
+                    <h3 class="text-[#1c1e21] text-lg font-medium mb-2">No recent experiments.</h3>
+                    <p class="text-[#828c9a] text-sm mb-6 max-w-md">Your workspace is ready. Start your first training loop to see logs appear here.</p>
+                    <button class="px-4 py-2 bg-primary text-white text-sm font-medium rounded hover:bg-[#0f4075] transition-colors">
+                        Begin Chapter 1: Linear Regression
+                    </button>
+                </div>
+                -->
+</section>
+<!-- Active Modules Section -->
+<section class="flex flex-col gap-6 mt-8">
+<div class="flex items-center justify-between border-b border-[#e2e6ec] pb-4">
+<h3 class="text-[#1c1e21] text-xl font-medium">Up Next</h3>
+</div>
+<a class="flex items-center justify-between p-6 bg-white border border-[#e2e6ec] rounded hover:border-primary transition-all cursor-pointer group shadow-sm hover:shadow-md relative overflow-hidden" href="#">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex flex-col gap-2">
+<p class="text-primary text-xs font-bold uppercase tracking-wider">Chapter 2</p>
+<h4 class="text-[#1c1e21] text-lg font-medium">Neural Networks Theory</h4>
+<p class="text-[#828c9a] text-sm">Understanding backpropagation and activation functions.</p>
+</div>
+<div class="flex items-center gap-2 text-primary font-medium text-sm">
+                        Continue reading <span class="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</a>
+</section>
+</div>
+</main>
+</body></html>

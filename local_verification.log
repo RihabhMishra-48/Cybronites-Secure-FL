@@ -1,0 +1,84 @@
+============================================================
+  AI GUARDIAN | SECURE FEDERATED LEARNING ORCHESTRATOR
+============================================================
+  [SYNC] Dashboard .env.local -> Port 7880
+  [PYTHON] /Users/sakhi/Code/secure_federated_learning/Cybronites/venv_mac/bin/python3
+
+  [1/3] Starting Bridge (:7880) + Flower Server (:8095)...
+  [WAIT] Waiting for bridge to come online... READY ✓
+  [2/3] Starting Client 0...
+  [2/3] Starting Client 1...
+
+============================================================
+  ALL SYSTEMS ONLINE
+  Bridge:    http://localhost:7880
+  WebSocket: ws://localhost:7880/ws
+  Dashboard: Open http://localhost:5173 (or 5174)
+  Logs:      tail -f backend.log
+============================================================
+  Press Ctrl+C to shut down.
+
+  [CLIENT 0] INFO:GuardianClient:Starting Guardian Client 0...
+  [CLIENT 1] INFO:GuardianClient:Starting Guardian Client 1...
+  [CLIENT 0] INFO:GuardianClient:Connecting to Secure Server at 127.0.0.1:8095 (Attempt 1)...
+  [CLIENT 1] INFO:GuardianClient:Connecting to Secure Server at 127.0.0.1:8095 (Attempt 1)...
+  [SERVER] 19:24:59 [INFO] GuardianServer: Initializing Orchestrator (Rounds: 5)...
+  [SERVER] 19:24:59 [INFO] GuardianBridge: Launching Guardian Bridge on port 7880...
+  [SERVER] 19:24:59 [INFO] GuardianBridge: Model source code loaded from /Users/sakhi/Code/secure_federated_learning/Cybronites/client/model.py
+  [CLIENT 1] INFO:GuardianClient:Client 1 | Public IP: 103.93.179.42
+  [CLIENT 0] INFO:GuardianClient:Client 0 | Public IP: 103.93.179.42
+  [CLIENT 0] INFO flwr 2026-04-07 19:24:59,603 | grpc.py:50 | Opened insecure gRPC connection (no certificates were passed)
+  [CLIENT 1] INFO flwr 2026-04-07 19:24:59,603 | grpc.py:50 | Opened insecure gRPC connection (no certificates were passed)
+  [CLIENT 1] INFO:flwr:Opened insecure gRPC connection (no certificates were passed)
+  [CLIENT 0] INFO:flwr:Opened insecure gRPC connection (no certificates were passed)
+  [CLIENT 1] DEBUG flwr 2026-04-07 19:24:59,605 | connection.py:39 | ChannelConnectivity.IDLE
+  [CLIENT 1] DEBUG:flwr:ChannelConnectivity.IDLE
+  [CLIENT 0] DEBUG flwr 2026-04-07 19:24:59,605 | connection.py:39 | ChannelConnectivity.IDLE
+  [CLIENT 0] DEBUG:flwr:ChannelConnectivity.IDLE
+  [CLIENT 1] DEBUG flwr 2026-04-07 19:24:59,609 | connection.py:39 | ChannelConnectivity.CONNECTING
+  [CLIENT 1] DEBUG:flwr:ChannelConnectivity.CONNECTING
+  [CLIENT 0] DEBUG flwr 2026-04-07 19:24:59,609 | connection.py:39 | ChannelConnectivity.CONNECTING
+  [CLIENT 0] DEBUG:flwr:ChannelConnectivity.CONNECTING
+  [CLIENT 0] DEBUG flwr 2026-04-07 19:24:59,615 | connection.py:39 | ChannelConnectivity.TRANSIENT_FAILURE
+  [CLIENT 1] DEBUG flwr 2026-04-07 19:24:59,615 | connection.py:39 | ChannelConnectivity.TRANSIENT_FAILURE
+  [CLIENT 0] DEBUG:flwr:ChannelConnectivity.TRANSIENT_FAILURE
+  [CLIENT 1] DEBUG:flwr:ChannelConnectivity.TRANSIENT_FAILURE
+  [CLIENT 1] I0407 19:24:59.627968  147578 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+  [CLIENT 0] I0407 19:24:59.627972  147579 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+  [SERVER] 19:24:59 [INFO] GuardianBridge: Public IP fetched: 103.93.179.42
+  [SERVER] 19:24:59 [INFO] GuardianBridge: Guardian Bridge Event Loop context captured.
+  [SERVER] ERROR:    [Errno 48] error while attempting to bind on address ('0.0.0.0', 7880): address already in use
+  [CLIENT 0] DEBUG flwr 2026-04-07 19:24:59,818 | connection.py:113 | gRPC channel closed
+  [CLIENT 0] DEBUG:flwr:gRPC channel closed
+  [CLIENT 0] WARNING:GuardianClient:Connection failed: <_MultiThreadedRendezvous of RPC that terminated with:
+  [CLIENT 0] status = StatusCode.UNAVAILABLE
+  [CLIENT 0] details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:127.0.0.1:8095: Failed to connect to remote host: Connection refused"
+  [CLIENT 0] debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:127.0.0.1:8095: Failed to connect to remote host: Connection refused", grpc_status:14}"
+  [CLIENT 0] >
+  [CLIENT 1] DEBUG flwr 2026-04-07 19:24:59,820 | connection.py:113 | gRPC channel closed
+  [CLIENT 1] DEBUG:flwr:gRPC channel closed
+  [CLIENT 1] WARNING:GuardianClient:Connection failed: <_MultiThreadedRendezvous of RPC that terminated with:
+  [CLIENT 1] status = StatusCode.UNAVAILABLE
+  [CLIENT 1] details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:127.0.0.1:8095: Failed to connect to remote host: Connection refused"
+  [CLIENT 1] debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:127.0.0.1:8095: Failed to connect to remote host: Connection refused"}"
+  [CLIENT 1] >
+  [SERVER] Traceback (most recent call last):
+  [SERVER] File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 197, in _run_module_as_main
+  [SERVER] return _run_code(code, main_globals, None,
+  [SERVER] File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 87, in _run_code
+  [SERVER] exec(code, run_globals)
+  [SERVER] File "/Users/sakhi/Code/secure_federated_learning/Cybronites/server/server.py", line 107, in <module>
+  [SERVER] main()
+  [SERVER] File "/Users/sakhi/Code/secure_federated_learning/Cybronites/server/server.py", line 61, in main
+  [SERVER] bridge.broadcast_sync("LOG", "Backend components initialized. Waiting for secure nodes...")
+  [SERVER] File "/Users/sakhi/Code/secure_federated_learning/Cybronites/server/bridge.py", line 192, in broadcast_sync
+  [SERVER] asyncio.run_coroutine_threadsafe(
+  [SERVER] File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/tasks.py", line 931, in run_coroutine_threadsafe
+  [SERVER] loop.call_soon_threadsafe(callback)
+  [SERVER] File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 791, in call_soon_threadsafe
+  [SERVER] self._check_closed()
+  [SERVER] File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 510, in _check_closed
+  [SERVER] raise RuntimeError('Event loop is closed')
+  [SERVER] RuntimeError: Event loop is closed
+  [SERVER] sys:1: RuntimeWarning: coroutine 'ConnectionManager.broadcast' was never awaited
+  [ERROR] Server process exited. Check backend.log

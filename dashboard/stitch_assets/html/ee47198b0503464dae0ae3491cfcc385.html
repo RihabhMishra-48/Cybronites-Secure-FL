@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model Architecture Builder - Layer Inspector</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600&amp;family=Fira+Code:wght@400&amp;family=IBM+Plex+Sans:wght@400;500&amp;family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3f9ae4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111a21",
+                        "text-main": "#2D3748",
+                        "text-muted": "#A0AEC0",
+                        "surface": "#F7FAFC",
+                        "border-color": "#E2E8F0"
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "heading": ["Crimson Pro", "serif"],
+                        "body": ["IBM Plex Sans", "sans-serif"],
+                        "mono": ["Fira Code", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "sm": "0px",
+                        "md": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "2xl": "0px",
+                        "3xl": "0px",
+                        "full": "0px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #f0f4f8; /* Main canvas background simulation */
+            display: flex;
+            justify-content: flex-end;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .math-block {
+            font-family: 'Fira Code', monospace;
+        }
+        h1, h2, h3 {
+            font-family: 'Crimson Pro', serif;
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F7FAFC; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="text-text-main antialiased selection:bg-primary selection:text-white">
+<!-- Main Canvas Simulation Area (Empty) -->
+<div class="flex-1 bg-white" style="background-image: linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg, #e5e7eb 1px, transparent 1px); background-size: 20px 20px;">
+<!-- Canvas content would go here -->
+</div>
+<!-- Layer Inspector Sidebar -->
+<aside class="w-[320px] h-screen bg-white border-l border-border-color flex flex-col shadow-sm shrink-0 overflow-y-auto">
+<!-- Header -->
+<header class="flex items-center justify-between p-4 border-b border-border-color bg-white sticky top-0 z-10">
+<h2 class="text-2xl font-semibold text-text-main tracking-tight font-heading">Dense Layer</h2>
+<div class="flex items-center gap-2">
+<button aria-label="Layer Settings" class="p-1.5 text-text-muted hover:text-text-main hover:bg-surface transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1" type="button">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<button aria-label="Delete Layer" class="p-1.5 text-text-muted hover:text-red-600 hover:bg-red-50 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1" type="button">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex flex-col flex-1 p-5 gap-8">
+<!-- Section: Mathematical Formulation -->
+<section class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-medium text-text-muted uppercase tracking-wider font-body">Formulation</h3>
+<button class="text-xs text-primary hover:underline focus:outline-none" type="button">View Source</button>
+</div>
+<div class="bg-surface border border-border-color p-4 flex flex-col items-center justify-center min-h-[100px] relative group">
+<!-- LaTeX rendering simulation -->
+<div class="math-block text-sm text-text-main overflow-x-auto whitespace-nowrap w-full text-center">
+                        f(x) = max(0, Wx + b)
+                    </div>
+<button aria-label="Copy Equation" class="absolute top-2 right-2 p-1 text-text-muted opacity-0 group-hover:opacity-100 transition-opacity hover:text-text-main focus:outline-none focus:ring-1 focus:ring-primary bg-white border border-border-color">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+</button>
+</div>
+<p class="text-xs text-text-muted leading-relaxed">
+                    Applies the rectified linear unit activation function over the linear transformation.
+                </p>
+</section>
+<hr class="border-border-color"/>
+<!-- Section: Hyperparameters -->
+<section class="flex flex-col gap-5">
+<h3 class="text-sm font-medium text-text-muted uppercase tracking-wider font-body mb-1">Hyperparameters</h3>
+<!-- Units Input -->
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-text-main font-body flex items-center justify-between" for="units">
+                        Units
+                        <span class="material-symbols-outlined text-[14px] text-text-muted cursor-help" title="Dimensionality of the output space">info</span>
+</label>
+<input class="block w-full border-border-color text-text-main sm:text-sm focus:ring-primary focus:border-primary font-mono py-2 px-3 shadow-sm" id="units" min="1" name="units" step="1" type="number" value="64"/>
+</div>
+<!-- Activation Select -->
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-text-main font-body flex items-center justify-between" for="activation">
+                        Activation
+                        <span class="material-symbols-outlined text-[14px] text-text-muted cursor-help" title="Activation function to use">info</span>
+</label>
+<select class="block w-full border-border-color text-text-main sm:text-sm focus:ring-primary focus:border-primary font-mono py-2 px-3 shadow-sm bg-white cursor-pointer" id="activation" name="activation">
+<option selected="" value="relu">ReLU</option>
+<option value="sigmoid">Sigmoid</option>
+<option value="tanh">Tanh</option>
+<option value="linear">Linear</option>
+<option value="softmax">Softmax</option>
+</select>
+</div>
+<!-- Use Bias Checkbox -->
+<div class="flex items-center mt-2">
+<input checked="" class="h-4 w-4 text-primary focus:ring-primary border-border-color cursor-pointer" id="use_bias" name="use_bias" type="checkbox"/>
+<label class="ml-2 block text-sm text-text-main font-body cursor-pointer" for="use_bias">
+                        Use Bias Vector
+                    </label>
+</div>
+<!-- Kernel Initializer Select -->
+<div class="flex flex-col gap-2 mt-2">
+<label class="text-sm font-medium text-text-main font-body flex items-center justify-between" for="kernel_initializer">
+                        Kernel Initializer
+                        <span class="material-symbols-outlined text-[14px] text-text-muted cursor-help" title="Initializer for the kernel weights matrix">info</span>
+</label>
+<select class="block w-full border-border-color text-text-main sm:text-sm focus:ring-primary focus:border-primary font-mono py-2 px-3 shadow-sm bg-white cursor-pointer" id="kernel_initializer" name="kernel_initializer">
+<option selected="" value="glorot_uniform">Glorot Uniform</option>
+<option value="glorot_normal">Glorot Normal</option>
+<option value="he_normal">He Normal</option>
+<option value="he_uniform">He Uniform</option>
+<option value="random_normal">Random Normal</option>
+<option value="zeros">Zeros</option>
+</select>
+</div>
+</section>
+<hr class="border-border-color mt-2"/>
+<!-- Output Shape Summary (Read-only) -->
+<section class="flex flex-col gap-3">
+<h3 class="text-sm font-medium text-text-muted uppercase tracking-wider font-body">Tensor Shape</h3>
+<div class="flex items-center justify-between bg-surface border border-border-color p-3">
+<span class="text-xs text-text-muted font-body">Input</span>
+<span class="text-sm font-mono text-text-main">(None, 128)</span>
+</div>
+<div class="flex items-center justify-center text-text-muted py-1">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</div>
+<div class="flex items-center justify-between bg-white border border-primary p-3 shadow-sm">
+<span class="text-xs font-medium text-primary font-body">Output</span>
+<span class="text-sm font-mono text-primary font-medium">(None, 64)</span>
+</div>
+</section>
+</div>
+</aside>
+</body></html>

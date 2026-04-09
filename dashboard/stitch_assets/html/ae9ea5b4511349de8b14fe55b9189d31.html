@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dataset Explorer - Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&amp;family=IBM+Plex+Sans:wght@400;500&amp;family=IBM+Plex+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#3f9ae4",
+          "background-light": "#f6f7f8",
+          "background-dark": "#111a21",
+          "surface": "#F7FAFC",
+          "text-main": "#2D3748",
+          "muted": "#A0AEC0",
+          "success": "#48BB78",
+          "warning": "#ED8936",
+          "border-color": "#E2E8F0"
+        },
+        fontFamily: {
+          "display": ["Inter"],
+          "heading": ["'Libre Baskerville'", "serif"],
+          "body": ["'IBM Plex Sans'", "sans-serif"],
+          "mono": ["'IBM Plex Mono'", "monospace"]
+        },
+        borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "0px"},
+      },
+    },
+  }
+</script>
+<style>
+  body { font-family: 'IBM Plex Sans', sans-serif; color: #2D3748; background-color: #FFFFFF; }
+  h1, h2, h3, h4, h5, h6, .font-heading { font-family: 'Libre Baskerville', serif; }
+  .font-mono { font-family: 'IBM Plex Mono', monospace; }
+  /* Override Tailwind rounded classes to enforce 0px radius as per PRD */
+  .rounded, .rounded-md, .rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-full { border-radius: 0px !important; }
+</style>
+</head>
+<body class="bg-white min-h-screen flex text-text-main overflow-x-hidden">
+<!-- Sidebar (Shared Component Integrated) -->
+<aside class="w-[300px] border-r border-border-color bg-surface flex flex-col flex-shrink-0 min-h-screen relative z-10">
+<div class="p-6 border-b border-border-color">
+<h1 class="font-heading font-bold text-2xl text-text-main mb-1">Dataset Explorer</h1>
+<p class="font-body text-sm text-muted">Academic-grade UI</p>
+</div>
+<nav class="flex-1 p-4 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 border-l-2 border-primary text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dataset</span>
+<span class="font-body font-medium text-sm">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 border-l-2 border-transparent hover:bg-black/5 text-text-main transition-colors" href="#">
+<span class="material-symbols-outlined">table_chart</span>
+<span class="font-body font-medium text-sm">Inspector</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 border-l-2 border-transparent hover:bg-black/5 text-text-main transition-colors" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-body font-medium text-sm">Visualizer</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 border-l-2 border-transparent hover:bg-black/5 text-text-main transition-colors" href="#">
+<span class="material-symbols-outlined">linear_scale</span>
+<span class="font-body font-medium text-sm">Pipeline</span>
+</a>
+</nav>
+<div class="p-6 border-t border-border-color bg-white">
+<h3 class="font-body font-bold text-xs uppercase tracking-wider text-muted mb-4">Metadata Summary</h3>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center border-b border-border-color/50 pb-2">
+<span class="font-body text-sm text-muted">Format</span>
+<span class="font-mono text-xs text-text-main">HDF5 / Parquet</span>
+</div>
+<div class="flex justify-between items-center border-b border-border-color/50 pb-2">
+<span class="font-body text-sm text-muted">Size</span>
+<span class="font-mono text-xs text-text-main">4.2 GB</span>
+</div>
+<div class="flex justify-between items-center border-b border-border-color/50 pb-2">
+<span class="font-body text-sm text-muted">License</span>
+<span class="font-mono text-xs text-text-main">Academic Only</span>
+</div>
+<div class="flex justify-between items-center border-b border-border-color/50 pb-2">
+<span class="font-body text-sm text-muted">Last Updated</span>
+<span class="font-mono text-xs text-text-main">2023-10-24</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-h-screen max-h-screen overflow-y-auto bg-white">
+<!-- Header -->
+<header class="px-8 py-6 border-b border-border-color flex justify-between items-end bg-white sticky top-0 z-10">
+<div class="flex flex-col gap-2 max-w-3xl">
+<h2 class="font-heading font-bold text-[28px] leading-tight text-text-main">Dataset Overview - ImageNet-Mini</h2>
+<p class="font-body text-base text-muted">High-level statistical summary, metadata, and schema definition.</p>
+</div>
+<button class="flex items-center gap-2 h-9 px-4 bg-primary text-white font-body font-medium text-sm hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Download Report</span>
+</button>
+</header>
+<!-- Content Body -->
+<div class="p-8 flex flex-col gap-8">
+<!-- Stat Cards Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Stat Card 1 -->
+<div class="bg-surface border border-border-color p-5 flex flex-col justify-center h-[100px]">
+<span class="font-body text-xs text-muted uppercase tracking-wide mb-1">Total Samples</span>
+<span class="font-heading font-bold text-2xl text-text-main">1,240,000</span>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface border border-border-color p-5 flex flex-col justify-center h-[100px]">
+<span class="font-body text-xs text-muted uppercase tracking-wide mb-1">Features</span>
+<span class="font-heading font-bold text-2xl text-text-main">12</span>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface border border-border-color p-5 flex flex-col justify-center h-[100px]">
+<span class="font-body text-xs text-muted uppercase tracking-wide mb-1">Classes</span>
+<span class="font-heading font-bold text-2xl text-text-main">100</span>
+</div>
+</section>
+<!-- Splits Summary -->
+<section>
+<h3 class="font-heading font-normal text-lg mb-4 text-text-main border-b border-border-color pb-2">Dataset Splits</h3>
+<div class="flex gap-4">
+<div class="flex-1 border border-border-color p-4 bg-white">
+<div class="flex justify-between items-center mb-2">
+<span class="font-body font-medium text-sm">Train</span>
+<span class="font-mono text-xs text-muted">80%</span>
+</div>
+<div class="w-full bg-surface h-2 border border-border-color">
+<div class="bg-primary h-full" style="width: 80%"></div>
+</div>
+<p class="font-mono text-xs mt-2 text-right">992,000 rows</p>
+</div>
+<div class="flex-1 border border-border-color p-4 bg-white">
+<div class="flex justify-between items-center mb-2">
+<span class="font-body font-medium text-sm">Validation</span>
+<span class="font-mono text-xs text-muted">10%</span>
+</div>
+<div class="w-full bg-surface h-2 border border-border-color">
+<div class="bg-warning h-full" style="width: 10%"></div>
+</div>
+<p class="font-mono text-xs mt-2 text-right">124,000 rows</p>
+</div>
+<div class="flex-1 border border-border-color p-4 bg-white">
+<div class="flex justify-between items-center mb-2">
+<span class="font-body font-medium text-sm">Test</span>
+<span class="font-mono text-xs text-muted">10%</span>
+</div>
+<div class="w-full bg-surface h-2 border border-border-color">
+<div class="bg-success h-full" style="width: 10%"></div>
+</div>
+<p class="font-mono text-xs mt-2 text-right">124,000 rows</p>
+</div>
+</div>
+</section>
+<!-- Schema Table -->
+<section>
+<div class="flex justify-between items-end mb-4 border-b border-border-color pb-2">
+<h3 class="font-heading font-normal text-lg text-text-main">Schema Definition</h3>
+<button class="text-primary hover:text-primary/80 font-body text-sm flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+          Copy Schema JSON
+        </button>
+</div>
+<div class="w-full border border-border-color overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface border-b border-border-color">
+<th class="py-3 px-4 font-body font-medium text-xs uppercase tracking-wider text-muted border-r border-border-color w-1/3">Column Name</th>
+<th class="py-3 px-4 font-body font-medium text-xs uppercase tracking-wider text-muted border-r border-border-color w-1/4">Data Type</th>
+<th class="py-3 px-4 font-body font-medium text-xs uppercase tracking-wider text-muted border-r border-border-color w-1/4 text-right">Non-Null Count</th>
+<th class="py-3 px-4 font-body font-medium text-xs uppercase tracking-wider text-muted text-right">Missing %</th>
+</tr>
+</thead>
+<tbody class="font-body text-sm">
+<tr class="border-b border-border-color hover:bg-surface transition-colors">
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-text-main font-semibold">image_id</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-primary">string</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-right">1,240,000</td>
+<td class="py-3 px-4 font-mono text-[13px] text-right text-success">0.00%</td>
+</tr>
+<tr class="border-b border-border-color hover:bg-surface transition-colors">
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-text-main font-semibold">image_data</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-primary">tensor(float32, [3, 224, 224])</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-right">1,240,000</td>
+<td class="py-3 px-4 font-mono text-[13px] text-right text-success">0.00%</td>
+</tr>
+<tr class="border-b border-border-color hover:bg-surface transition-colors">
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-text-main font-semibold">label_class_id</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-primary">int64</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-right">1,240,000</td>
+<td class="py-3 px-4 font-mono text-[13px] text-right text-success">0.00%</td>
+</tr>
+<tr class="border-b border-border-color hover:bg-surface transition-colors">
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-text-main font-semibold">label_name</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-primary">string</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-right">1,239,985</td>
+<td class="py-3 px-4 font-mono text-[13px] text-right text-warning">0.001%</td>
+</tr>
+<tr class="border-b border-border-color hover:bg-surface transition-colors">
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-text-main font-semibold">metadata_source</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-primary">string</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-right">980,500</td>
+<td class="py-3 px-4 font-mono text-[13px] text-right text-warning">20.92%</td>
+</tr>
+<tr class="hover:bg-surface transition-colors">
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-text-main font-semibold">bounding_boxes</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-primary">list[float32]</td>
+<td class="py-3 px-4 border-r border-border-color font-mono text-[13px] text-right">450,000</td>
+<td class="py-3 px-4 font-mono text-[13px] text-right text-[#F56565]">63.70%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</body></html>

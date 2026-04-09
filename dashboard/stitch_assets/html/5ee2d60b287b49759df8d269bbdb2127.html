@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Curriculum Dashboard - Model Architecture Builder</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&amp;family=IBM+Plex+Sans:wght@400;500&amp;family=Fira+Code:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3f9ae4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111a21",
+                        "academic-surface": "#F7FAFC",
+                        "academic-text": "#2D3748",
+                        "academic-muted": "#A0AEC0",
+                        "academic-accent": "#48BB78",
+                        "academic-warning": "#ED8936",
+                        "academic-border": "#E2E8F0"
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "heading": ["Crimson Pro", "serif"],
+                        "body": ["IBM Plex Sans", "sans-serif"],
+                        "mono": ["Fira Code", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "sm": "0px",
+                        "md": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "2xl": "0px",
+                        "3xl": "0px",
+                        "full": "0px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            color: #2D3748;
+            background-color: #FFFFFF;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Crimson Pro', serif;
+        }
+        code, pre {
+            font-family: 'Fira Code', monospace;
+        }
+    </style>
+</head>
+<body class="bg-white text-academic-text min-h-screen flex flex-col">
+<!-- TopNav - Back to Main Exception for Focused Views (Using Minimal Header instead of shared component) -->
+<header class="border-b border-academic-border px-6 py-4 flex items-center justify-between bg-white sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<h1 class="font-heading font-semibold text-2xl tracking-tight text-academic-text">Model Architecture Builder</h1>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-body text-academic-muted">Student: A. Turing</span>
+<div class="h-8 w-8 bg-academic-surface border border-academic-border flex items-center justify-center">
+<span class="material-symbols-outlined text-academic-text" style="font-size: 20px;">person</span>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+<!-- Syllabus Navigation (Left 25%) -->
+<aside class="w-full md:w-[250px] lg:w-1/4 border-b md:border-b-0 md:border-r border-academic-border bg-white flex flex-col shrink-0 overflow-y-auto">
+<div class="p-4 border-b border-academic-border bg-academic-surface">
+<h2 class="font-heading font-semibold text-lg text-academic-text">Course Syllabus</h2>
+<p class="text-xs font-body text-academic-muted mt-1">Foundations of Deep Learning</p>
+</div>
+<nav class="flex-1 overflow-y-auto py-2">
+<!-- Module 1 (Completed) -->
+<button class="w-full text-left px-4 py-4 border-b border-academic-border hover:bg-academic-surface transition-colors flex items-start gap-3 group">
+<span class="material-symbols-outlined text-academic-accent shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<div class="font-body font-medium text-sm text-academic-text group-hover:text-primary transition-colors">Module 1: Perceptrons</div>
+<div class="font-body text-xs text-academic-muted mt-1">Linear boundaries and activation</div>
+</div>
+</button>
+<!-- Module 2 (Active) -->
+<button class="w-full text-left px-4 py-4 border-b border-academic-border bg-academic-surface border-l-4 border-l-primary flex items-start gap-3">
+<span class="material-symbols-outlined text-primary shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">radio_button_checked</span>
+<div>
+<div class="font-body font-medium text-sm text-academic-text">Module 2: CNNs</div>
+<div class="font-body text-xs text-academic-muted mt-1">Spatial hierarchies in images</div>
+</div>
+</button>
+<!-- Module 3 (Locked/Upcoming) -->
+<button class="w-full text-left px-4 py-4 border-b border-academic-border hover:bg-academic-surface transition-colors flex items-start gap-3 opacity-60">
+<span class="material-symbols-outlined text-academic-muted shrink-0 mt-0.5">lock</span>
+<div>
+<div class="font-body font-medium text-sm text-academic-text">Module 3: RNNs</div>
+<div class="font-body text-xs text-academic-muted mt-1">Sequential data processing</div>
+</div>
+</button>
+<!-- Module 4 (Locked/Upcoming) -->
+<button class="w-full text-left px-4 py-4 border-b border-academic-border hover:bg-academic-surface transition-colors flex items-start gap-3 opacity-60">
+<span class="material-symbols-outlined text-academic-muted shrink-0 mt-0.5">lock</span>
+<div>
+<div class="font-body font-medium text-sm text-academic-text">Module 4: Transformers</div>
+<div class="font-body text-xs text-academic-muted mt-1">Attention mechanisms</div>
+</div>
+</button>
+</nav>
+</aside>
+<!-- Assignment Details (Right 75%) -->
+<section class="flex-1 bg-white p-6 md:p-10 lg:p-12 overflow-y-auto relative">
+<div class="max-w-[600px] mx-auto">
+<div class="mb-2 flex items-center gap-2 text-sm font-body text-primary">
+<span>Module 2</span>
+<span class="material-symbols-outlined" style="font-size: 16px;">chevron_right</span>
+<span>Assignment 2.1</span>
+</div>
+<h2 class="font-heading font-semibold text-3xl text-academic-text mb-6 leading-tight">Image Classification with Convolutional Neural Networks</h2>
+<div class="space-y-8">
+<!-- Problem Statement -->
+<div class="border border-academic-border p-6 relative">
+<div class="absolute -top-3 left-4 bg-white px-2 text-xs font-mono text-academic-muted uppercase tracking-wider">Problem Statement</div>
+<p class="font-body text-[15px] leading-relaxed text-academic-text mb-4">
+                            Construct a Convolutional Neural Network (CNN) capable of classifying handwritten digits. The network must extract hierarchical spatial features using convolutional layers before flattening the representation for a final dense classification layer.
+                        </p>
+<p class="font-body text-[15px] leading-relaxed text-academic-text">
+                            Your objective is to design an architecture $f(x)$ that minimizes the categorical cross-entropy loss $\mathcal{L}$ over the training set, achieving a validation accuracy of at least 98%.
+                        </p>
+<div class="mt-4 p-4 bg-academic-surface font-mono text-sm overflow-x-auto border border-academic-border">
+                            $$ \mathcal{L} = -\sum_{c=1}^{M} y_{o,c} \log(p_{o,c}) $$
+                        </div>
+</div>
+<!-- Dataset Overview -->
+<div class="border border-academic-border p-6 relative">
+<div class="absolute -top-3 left-4 bg-white px-2 text-xs font-mono text-academic-muted uppercase tracking-wider">Dataset Overview</div>
+<div class="grid grid-cols-2 gap-6 mb-4">
+<div>
+<div class="text-xs font-mono text-academic-muted mb-1">Name</div>
+<div class="font-body font-medium">MNIST Digits</div>
+</div>
+<div>
+<div class="text-xs font-mono text-academic-muted mb-1">Classes</div>
+<div class="font-body font-medium">10 (Digits 0-9)</div>
+</div>
+<div>
+<div class="text-xs font-mono text-academic-muted mb-1">Input Shape</div>
+<div class="font-mono text-sm bg-academic-surface px-2 py-1 inline-block border border-academic-border">(28, 28, 1)</div>
+</div>
+<div>
+<div class="text-xs font-mono text-academic-muted mb-1">Training Samples</div>
+<div class="font-body font-medium">60,000</div>
+</div>
+</div>
+<div class="mt-4 border-t border-academic-border pt-4">
+<div class="text-xs font-mono text-academic-muted mb-2">Sample Visualization</div>
+<div class="flex gap-2">
+<div class="w-12 h-12 bg-black flex items-center justify-center text-white font-mono text-2xl border border-academic-border">3</div>
+<div class="w-12 h-12 bg-black flex items-center justify-center text-white font-mono text-2xl border border-academic-border">1</div>
+<div class="w-12 h-12 bg-black flex items-center justify-center text-white font-mono text-2xl border border-academic-border">4</div>
+<div class="w-12 h-12 bg-black flex items-center justify-center text-white font-mono text-2xl border border-academic-border">9</div>
+</div>
+</div>
+</div>
+<!-- Action -->
+<div class="pt-4 flex justify-end">
+<button class="bg-primary hover:bg-[#3182CE] text-white font-body font-medium py-3 px-6 transition-colors flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+<span>Initialize Environment</span>
+<span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

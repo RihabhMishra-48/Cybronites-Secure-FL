@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tabular Inspector - Dataset Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&amp;family=IBM+Plex+Sans:wght@400;500&amp;family=IBM+Plex+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4299E1",
+                        "background": "#FFFFFF",
+                        "surface": "#F7FAFC",
+                        "text-main": "#2D3748",
+                        "muted": "#A0AEC0",
+                        "success": "#48BB78",
+                        "warning": "#ED8936",
+                        "border-color": "#E2E8F0",
+                    },
+                    fontFamily: {
+                        "heading": ["'Libre Baskerville'", "serif"],
+                        "data": ["'IBM Plex Sans'", "sans-serif"],
+                        "mono": ["'IBM Plex Mono'", "monospace"],
+                    },
+                    borderRadius: {
+                        "none": "0px",
+                    },
+                    spacing: {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "lg": "24px",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: var(--font-data);
+            background-color: theme('colors.background');
+            color: theme('colors.text-main');
+        }
+        
+        .font-heading { font-family: theme('fontFamily.heading'); }
+        .font-data { font-family: theme('fontFamily.data'); }
+        .font-mono { font-family: theme('fontFamily.mono'); }
+
+        /* Custom Tooltip */
+        .group:hover .custom-tooltip {
+            display: block;
+        }
+        
+        /* Ensure table header is sticky */
+        th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        /* Table Border Collapse for 1px borders */
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid theme('colors.border-color');
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-background text-text-main font-data selection:bg-primary selection:text-white">
+<!-- Minimal Header (Back-to-Main Exception) -->
+<header class="bg-surface border-b border-border-color px-lg py-sm flex items-center justify-between sticky top-0 z-20">
+<div class="flex items-center gap-md">
+<a aria-label="Go back" class="text-muted hover:text-primary transition-colors flex items-center justify-center" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="arrow_back">arrow_back</span>
+</a>
+<h1 class="font-heading font-bold text-[24px] text-text-main m-0 leading-none">Tabular Inspector</h1>
+<span class="text-muted text-[14px] ml-sm border-l border-border-color pl-md py-xs">dataset_v2.1_clean</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="text-muted text-[12px] font-mono">Total Rows: 1,048,576</span>
+<button class="bg-surface border border-border-color hover:border-primary text-text-main px-md py-xs text-[14px] font-medium transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+                Export View
+            </button>
+</div>
+</header>
+<main class="flex-1 flex flex-col overflow-hidden relative">
+<!-- Sticky Top Action / Filter Bar -->
+<div class="bg-white border-b border-border-color px-md py-sm flex items-center gap-md sticky top-0 z-10 shrink-0">
+<div class="flex items-center text-muted">
+<span class="material-symbols-outlined text-[20px]" data-icon="filter_list">filter_list</span>
+</div>
+<!-- Filter Inputs Group -->
+<div class="flex gap-sm flex-1 overflow-x-auto no-scrollbar">
+<!-- ID Filter -->
+<div class="relative min-w-[150px]">
+<input class="w-full bg-transparent border-0 border-b border-border-color focus:border-primary focus:ring-0 px-xs py-xs text-[14px] font-mono placeholder:text-muted placeholder:font-data transition-colors" placeholder="Filter id..." type="text"/>
+</div>
+<!-- Text Input Filter -->
+<div class="relative flex-1 min-w-[300px]">
+<input class="w-full bg-transparent border-0 border-b border-border-color focus:border-primary focus:ring-0 px-xs py-xs text-[14px] placeholder:text-muted transition-colors" placeholder="Search text_input (regex supported)..." type="text"/>
+</div>
+<!-- Label Filter -->
+<div class="relative min-w-[150px]">
+<select class="w-full bg-transparent border-0 border-b border-border-color focus:border-primary focus:ring-0 px-xs py-xs text-[14px] text-text-main transition-colors appearance-none">
+<option value="">All Labels</option>
+<option value="positive">POSITIVE</option>
+<option value="negative">NEGATIVE</option>
+<option value="neutral">NEUTRAL</option>
+</select>
+<span class="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 text-muted pointer-events-none text-[18px]" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+<!-- Confidence Filter -->
+<div class="relative min-w-[200px] flex items-center gap-xs">
+<span class="text-[12px] text-muted whitespace-nowrap">Conf &gt;</span>
+<input class="w-full bg-transparent border-0 border-b border-border-color focus:border-primary focus:ring-0 px-xs py-xs text-[14px] font-mono placeholder:text-muted placeholder:font-data transition-colors text-right" placeholder="0.0" step="0.1" type="number"/>
+</div>
+</div>
+<div class="flex items-center gap-sm shrink-0 border-l border-border-color pl-md">
+<button class="text-[12px] text-primary hover:text-text-main transition-colors">Clear Filters</button>
+</div>
+</div>
+<!-- High-Density Data Grid Container -->
+<div class="flex-1 overflow-auto bg-white relative group/table">
+<table class="w-full text-left text-[14px] whitespace-nowrap border-collapse">
+<thead class="bg-surface text-text-main font-medium sticky top-0 z-10 shadow-[0_1px_0_theme('colors.border-color')]">
+<tr>
+<!-- ID Column (Sortable) -->
+<th class="p-sm w-[100px] cursor-pointer hover:bg-border-color/30 transition-colors group/th">
+<div class="flex items-center justify-between">
+<span>id</span>
+<span class="material-symbols-outlined text-[16px] text-muted group-hover/th:text-text-main" data-icon="unfold_more">unfold_more</span>
+</div>
+</th>
+<!-- Text Input Column (Sortable) -->
+<th class="p-sm min-w-[400px] cursor-pointer hover:bg-border-color/30 transition-colors group/th">
+<div class="flex items-center justify-between">
+<span>text_input</span>
+<span class="material-symbols-outlined text-[16px] text-muted group-hover/th:text-text-main" data-icon="unfold_more">unfold_more</span>
+</div>
+</th>
+<!-- Target Label Column (Sorted Desc) -->
+<th class="p-sm w-[150px] cursor-pointer bg-border-color/20 hover:bg-border-color/40 transition-colors group/th">
+<div class="flex items-center justify-between">
+<span>target_label</span>
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="expand_more">expand_more</span>
+</div>
+</th>
+<!-- Confidence Score Column (Numeric, Right Aligned) -->
+<th class="p-sm w-[150px] text-right cursor-pointer hover:bg-border-color/30 transition-colors group/th">
+<div class="flex items-center justify-end gap-xs">
+<span class="material-symbols-outlined text-[16px] text-muted group-hover/th:text-text-main" data-icon="unfold_more">unfold_more</span>
+<span>confidence_score</span>
+</div>
+</th>
+<!-- Actions / Meta Column -->
+<th class="p-sm w-[80px] text-center text-muted">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_horiz">more_horiz</span>
+</th>
+</tr>
+</thead>
+<tbody class="text-text-main bg-white divide-y divide-border-color">
+<!-- Row 1 -->
+<tr class="hover:bg-surface transition-colors group/row">
+<td class="p-sm font-mono text-muted text-[13px]">00001</td>
+<td class="p-sm max-w-[400px] truncate relative group">
+                            This is a sample text for training showing a clearly positive sentiment regarding the recent feature updates.
+                            <!-- Tooltip for truncated text -->
+<div class="custom-tooltip hidden absolute left-0 top-full mt-1 z-50 bg-text-main text-white text-[12px] p-sm w-max max-w-[500px] whitespace-normal shadow-lg">
+                                This is a sample text for training showing a clearly positive sentiment regarding the recent feature updates.
+                            </div>
+</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-0.5 border border-border-color text-[12px] font-medium bg-surface text-text-main">
+                                POSITIVE
+                            </span>
+</td>
+<td class="p-sm text-right font-mono text-[13px]">0.9923</td>
+<td class="p-sm text-center">
+<button aria-label="Inspect row" class="text-muted hover:text-primary opacity-0 group-hover/row:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface transition-colors group/row">
+<td class="p-sm font-mono text-muted text-[13px]">00002</td>
+<td class="p-sm max-w-[400px] truncate relative group">
+                            Another example showing negative sentiment, specifically pointing out the slow load times during peak hours and the confusing navigation.
+                            <div class="custom-tooltip hidden absolute left-0 top-full mt-1 z-50 bg-text-main text-white text-[12px] p-sm w-max max-w-[500px] whitespace-normal shadow-lg">
+                                Another example showing negative sentiment, specifically pointing out the slow load times during peak hours and the confusing navigation.
+                            </div>
+</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-0.5 border border-border-color text-[12px] font-medium bg-surface text-text-main">
+                                NEGATIVE
+                            </span>
+</td>
+<td class="p-sm text-right font-mono text-[13px]">0.1204</td>
+<td class="p-sm text-center">
+<button aria-label="Inspect row" class="text-muted hover:text-primary opacity-0 group-hover/row:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 (Missing Value Highlight) -->
+<tr class="hover:bg-surface transition-colors group/row bg-warning/5">
+<td class="p-sm font-mono text-muted text-[13px]">00003</td>
+<td class="p-sm max-w-[400px] truncate relative group">
+                            Neutral text without strong opinions. Just stating facts.
+                        </td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-0.5 border border-warning text-[12px] font-medium bg-warning/10 text-warning">
+                                NULL
+                            </span>
+</td>
+<td class="p-sm text-right font-mono text-[13px]">0.5431</td>
+<td class="p-sm text-center">
+<button aria-label="Inspect row" class="text-muted hover:text-primary opacity-0 group-hover/row:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface transition-colors group/row">
+<td class="p-sm font-mono text-muted text-[13px]">00004</td>
+<td class="p-sm max-w-[400px] truncate relative group">
+                            Absolutely fantastic performance today! The model converged much faster than anticipated under these specific conditions.
+                            <div class="custom-tooltip hidden absolute left-0 top-full mt-1 z-50 bg-text-main text-white text-[12px] p-sm w-max max-w-[500px] whitespace-normal shadow-lg">
+                                Absolutely fantastic performance today! The model converged much faster than anticipated under these specific conditions.
+                            </div>
+</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-0.5 border border-border-color text-[12px] font-medium bg-surface text-text-main">
+                                POSITIVE
+                            </span>
+</td>
+<td class="p-sm text-right font-mono text-[13px]">0.9871</td>
+<td class="p-sm text-center">
+<button aria-label="Inspect row" class="text-muted hover:text-primary opacity-0 group-hover/row:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface transition-colors group/row">
+<td class="p-sm font-mono text-muted text-[13px]">00005</td>
+<td class="p-sm max-w-[400px] truncate relative group">
+                            Terrible results, needs immediate fix. The pipeline broke right after the normalization step.
+                            <div class="custom-tooltip hidden absolute left-0 top-full mt-1 z-50 bg-text-main text-white text-[12px] p-sm w-max max-w-[500px] whitespace-normal shadow-lg">
+                                Terrible results, needs immediate fix. The pipeline broke right after the normalization step.
+                            </div>
+</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-0.5 border border-border-color text-[12px] font-medium bg-surface text-text-main">
+                                NEGATIVE
+                            </span>
+</td>
+<td class="p-sm text-right font-mono text-[13px]">0.0412</td>
+<td class="p-sm text-center">
+<button aria-label="Inspect row" class="text-muted hover:text-primary opacity-0 group-hover/row:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</td>
+</tr>
+<!-- Additional Rows to demonstrate density (Copy of Row 1 for filler) -->
+<tr class="hover:bg-surface transition-colors group/row">
+<td class="p-sm font-mono text-muted text-[13px]">00006</td>
+<td class="p-sm max-w-[400px] truncate">
+                            The system is functional but could use some optimization in the data loading phase.
+                        </td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-0.5 border border-border-color text-[12px] font-medium bg-surface text-text-main">
+                                NEUTRAL
+                            </span>
+</td>
+<td class="p-sm text-right font-mono text-[13px]">0.4912</td>
+<td class="p-sm text-center">
+<button aria-label="Inspect row" class="text-muted hover:text-primary opacity-0 group-hover/row:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface transition-colors group/row">
+<td class="p-sm font-mono text-muted text-[13px]">00007</td>
+<td class="p-sm max-w-[400px] truncate">
+                            I love the new interface! It makes inspecting tabular data so much easier.
+                        </td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-0.5 border border-border-color text-[12px] font-medium bg-surface text-text-main">
+                                POSITIVE
+                            </span>
+</td>
+<td class="p-sm text-right font-mono text-[13px]">0.9421</td>
+<td class="p-sm text-center">
+<button aria-label="Inspect row" class="text-muted hover:text-primary opacity-0 group-hover/row:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="bg-surface border-t border-border-color px-md py-sm flex items-center justify-between shrink-0">
+<div class="text-[12px] text-muted">
+                Showing <span class="font-mono text-text-main">1</span> to <span class="font-mono text-text-main">50</span> of <span class="font-mono text-text-main">1,048,576</span> entries
+            </div>
+<div class="flex items-center gap-sm text-[14px]">
+<button class="text-muted hover:text-primary disabled:opacity-50 disabled:hover:text-muted transition-colors px-sm py-xs flex items-center gap-xs" disabled="">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+                    Prev
+                </button>
+<div class="flex items-center gap-xs font-mono text-[13px]">
+<span class="text-primary font-medium">1</span>
+<span class="text-muted">/</span>
+<span class="text-muted">20,972</span>
+</div>
+<button class="text-text-main hover:text-primary transition-colors px-sm py-xs flex items-center gap-xs">
+                    Next
+                    <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+</body></html>

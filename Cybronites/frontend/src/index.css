@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+:root {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --primary: #06b6d4; /* Cyan 500 */
+  --primary-glow: rgba(6, 182, 212, 0.5);
+  --secondary: #8b5cf6; /* Violet 500 */
+  --accent: #f43f5e; /* Rose 500 */
+  --muted: #27272a;
+  --border: #3f3f46;
+}
+
+@theme {
+  --color-cyber-bg: #09090b;
+  --color-cyber-primary: #06b6d4;
+  --color-cyber-secondary: #8b5cf6;
+  --color-cyber-accent: #f43f5e;
+  --color-cyber-border: #3f3f46;
+  
+  --font-mono: "Fira Code", "IBM Plex Mono", monospace;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+}
+
+/* Custom Cyber Animations */
+@keyframes neon-pulse {
+  0% { box-shadow: 0 0 5px var(--primary-glow); }
+  50% { box-shadow: 0 0 20px var(--primary-glow); }
+  100% { box-shadow: 0 0 5px var(--primary-glow); }
+}
+
+.neon-border {
+  border: 1px solid var(--primary);
+  animation: neon-pulse 2s infinite ease-in-out;
+}
+
+.glass-card {
+  background: rgba(24, 24, 27, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(63, 63, 70, 0.5);
+}
+
+.cyber-grid {
+  background-image: linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+}

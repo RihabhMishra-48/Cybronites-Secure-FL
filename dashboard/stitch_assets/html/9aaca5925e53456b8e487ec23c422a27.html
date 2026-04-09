@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Academic Clean - Theory Module</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#16559c",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111921",
+                        "paper": "#FDFDFB",
+                        "surface": "#FFFFFF",
+                        "text-main": "#1C1E21",
+                        "muted": "#828C9A",
+                        "math-bg": "#F5F7FA",
+                        "border-color": "#E2E6EC"
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem",
+                        "sm": "0.125rem" // Aligning with design system sharp corners
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+            background-color: theme('colors.paper');
+            color: theme('colors.text-main');
+            line-height: 1.6;
+        }
+        
+        /* Math block styling */
+        .math-block {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: theme('colors.math-bg');
+            border-top: 1px solid theme('colors.border-color');
+            border-bottom: 1px solid theme('colors.border-color');
+        }
+
+        /* Custom scrollbar for math blocks */
+        .math-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+        .math-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .math-scroll::-webkit-scrollbar-thumb {
+            background-color: theme('colors.muted');
+            border-radius: 4px;
+        }
+
+        /* Range slider styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: theme('colors.primary');
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 0 0 2px theme('colors.paper'), 0 0 0 4px theme('colors.primary');
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: theme('colors.border-color');
+            border-radius: 2px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col items-center py-16 px-4 md:px-8">
+<!-- Top Navigation included based on Relevance Test (Destination Screen) -->
+<div class="fixed top-0 left-0 right-0 z-50 bg-[#f8fafb] border-b border-solid border-b-[#e8edf3]">
+<header class="flex items-center justify-between whitespace-nowrap px-10 py-3 max-w-[1200px] mx-auto w-full">
+<div class="flex items-center gap-4 text-[#0e141b]">
+<div class="size-4 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-[#0e141b] text-lg font-bold leading-tight tracking-[-0.015em]">Academic Clean</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-[#0e141b] text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-bold leading-normal border-b-2 border-primary pb-1" href="#">Courses</a>
+</div>
+</div>
+</header>
+</div>
+<!-- Main Content Container -->
+<main class="w-full max-w-[680px] mt-16 relative">
+<!-- Header Section -->
+<header class="mb-12">
+<h1 class="text-4xl md:text-[40px] font-bold text-text-main leading-tight tracking-tight mb-4">
+                Chapter 3: Backpropagation and Gradient Descent
+            </h1>
+<div class="flex items-center gap-2 text-muted text-base">
+<span class="font-medium text-text-main">Dr. Alan Turing</span>
+<span>•</span>
+<span>Oct 24</span>
+</div>
+</header>
+<!-- Body Content -->
+<article class="space-y-8 text-lg">
+<p>
+                In this section, we explore the mathematical foundations of the neural network layer, specifically focusing on how weights are updated during training to minimize the loss function. The core of modern deep learning relies on an elegant application of the chain rule from calculus, known as backpropagation.
+            </p>
+<!-- Margin Note Example (Desktop right, Mobile inline) -->
+<aside class="xl:absolute xl:right-[-280px] xl:w-[240px] xl:top-[280px] text-sm text-muted bg-surface p-4 border border-border-color rounded-sm xl:bg-transparent xl:border-none xl:p-0 my-6 xl:my-0">
+<strong class="text-text-main block mb-1">Historical Context</strong>
+                While the chain rule dates back to Leibniz, the specific application to neural networks (backpropagation) was popularized by Rumelhart, Hinton, and Williams in 1986.
+            </aside>
+<p>
+                To understand gradient descent, we must first define our objective: finding a set of parameters $\theta$ that minimizes a given loss function $\mathcal{L}(\theta)$. The gradient, denoted as $\nabla_\theta \mathcal{L}$, points in the direction of steepest ascent. Therefore, to minimize the loss, we take a step in the opposite direction.
+            </p>
+<!-- Math Block -->
+<div class="math-block w-[calc(100%+2rem)] -ml-4 md:w-[calc(100%+4rem)] md:-ml-8 px-4 md:px-8 py-6 my-10 overflow-x-auto math-scroll relative">
+<div class="min-w-max text-sm md:text-base text-center text-text-main">
+                    $$ \theta_{t+1} = \theta_t - \eta \cdot \nabla_\theta \mathcal{L}(\theta_t) $$
+                </div>
+</div>
+<p>
+                Where $\eta$ represents the <strong class="font-semibold text-primary">learning rate</strong>, a crucial hyperparameter that determines the step size at each iteration. If $\eta$ is too large, the algorithm may overshoot the minimum and diverge. If it is too small, convergence will be painfully slow or it might get stuck in local minima.
+            </p>
+<!-- Interactive Diagram Section -->
+<section class="my-14 border border-border-color rounded-sm bg-surface overflow-hidden shadow-sm">
+<div class="p-4 border-b border-border-color bg-math-bg flex justify-between items-center">
+<h3 class="font-semibold text-text-main text-base flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="explore">explore</span>
+                        Interactive: Loss Surface
+                    </h3>
+<span class="text-xs text-muted font-mono">Fig. 3.1</span>
+</div>
+<!-- Diagram Canvas Area -->
+<div class="w-full h-[400px] relative bg-surface flex items-center justify-center overflow-hidden group cursor-crosshair">
+<!-- Placeholder for D3/Canvas render. Using a CSS gradient to simulate a complex surface for now -->
+<div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-50 via-surface to-math-bg opacity-70"></div>
+<!-- Contour lines simulation -->
+<svg class="absolute inset-0 opacity-20" height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="40" id="grid" patternunits="userSpaceOnUse" width="40">
+<path class="text-primary" d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+<!-- Abstract contour paths -->
+<path class="text-primary opacity-50" d="M 100 200 Q 340 50 580 300" fill="none" stroke="currentColor" stroke-width="1"></path>
+<path class="text-primary opacity-30" d="M 50 150 Q 340 150 630 250" fill="none" stroke="currentColor" stroke-width="1"></path>
+</svg>
+<!-- Current Point Indicator -->
+<div class="absolute top-[40%] left-[60%] transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none">
+<div class="w-3 h-3 rounded-full bg-primary shadow-[0_0_0_4px_rgba(22,85,156,0.2)]"></div>
+<div class="mt-2 bg-text-main text-white text-xs px-2 py-1 rounded font-mono shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            L=0.42, w=1.2
+                        </div>
+</div>
+</div>
+<!-- Controls -->
+<div class="p-6 bg-surface border-t border-border-color">
+<div class="flex justify-between items-center mb-2">
+<label class="text-sm font-medium text-text-main">Weight Parameter ($w$)</label>
+<span class="font-mono text-sm text-primary">1.20</span>
+</div>
+<input class="w-full" max="5" min="-5" step="0.1" type="range" value="1.2"/>
+<div class="flex justify-between text-xs text-muted mt-2 font-mono">
+<span>-5.0</span>
+<span>0.0</span>
+<span>+5.0</span>
+</div>
+</div>
+</section>
+<p>
+                As demonstrated above, navigating the loss landscape requires precise tuning. In a multi-dimensional space, calculating these gradients analytically for every weight becomes computationally infeasible. This is where the backpropagation algorithm shines, computing all necessary gradients efficiently in a single backward pass.
+            </p>
+<!-- Call to Action -->
+<div class="mt-16 pt-8 border-t border-border-color flex flex-col sm:flex-row items-center justify-between gap-6">
+<div>
+<h4 class="font-bold text-text-main mb-1">Ready to apply theory?</h4>
+<p class="text-sm text-muted">Implement gradient descent in PyTorch.</p>
+</div>
+<button class="bg-primary hover:bg-[#11437c] text-white px-6 py-3 rounded-sm font-medium transition-colors flex items-center gap-2 whitespace-nowrap shadow-sm group">
+                    Enter Workspace
+                    <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</article>
+</main>
+</body></html>

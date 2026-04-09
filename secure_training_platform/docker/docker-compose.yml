@@ -1,0 +1,57 @@
+# Secure AI Training Platform — Docker Compose
+# Full stack: API + Worker + Redis
+
+version: "3.9"
+
+services:
+  # ── Redis Job Queue ─────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - stp_network
+
+  # ── API + Training Worker ───────────────────────────
+  platform:
+    build:
+      context: ../..
+      dockerfile: secure_training_platform/docker/Dockerfile.worker
+    ports:
+      - "8100:8100"
+    environment:
+      - STP_REDIS_HOST=redis
+      - STP_REDIS_PORT=6379
+      - STP_API_HOST=0.0.0.0
+      - STP_API_PORT=8100
+      - STP_MASTER_KEY=${STP_MASTER_KEY:-secure-dev-key}
+      - STP_API_KEY=${STP_API_KEY:-dev-api-key-change-in-prod}
+      - STP_LOG_LEVEL=INFO
+    volumes:
+      - vault_data:/app/secure_training_platform/dataset_vault/datasets
+      - model_data:/app/secure_training_platform/model_registry/models
+      - db_data:/app/secure_training_platform/database
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - stp_network
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  vault_data:
+  model_data:
+  db_data:
+
+networks:
+  stp_network:
+    driver: bridge

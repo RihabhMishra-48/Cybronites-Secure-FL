@@ -1,0 +1,21 @@
+# AI Guardian: Secure Federated Learning Framework (Flower + PyTorch)
+
+# Federated Learning
+flwr==1.4.0
+
+# AI/ML Core
+torch>=1.12.0
+torchvision>=0.13.0
+numpy>=1.21.0
+
+# Security & Utilities
+opacus>=1.2.0  # For Differential Privacy (Bonus)
+matplotlib     # For monitoring charts
+scipy          # For statistical anomaly detection
+requests       # For some API calls if needed
+
+# Dashboard Bridge (FastAPI)
+fastapi
+uvicorn
+python-multipart
+websockets

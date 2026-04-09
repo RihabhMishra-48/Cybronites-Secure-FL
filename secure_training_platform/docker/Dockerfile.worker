@@ -1,0 +1,30 @@
+# Secure AI Training Platform — Worker Container
+FROM python:3.10-slim
+
+# Security: run as non-root
+RUN groupadd -r trainer && useradd -r -g trainer trainer
+
+WORKDIR /app
+
+# System dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY secure_training_platform/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy platform code
+COPY secure_training_platform/ ./secure_training_platform/
+
+# Switch to non-root user
+USER trainer
+
+# Environment
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV STP_LOG_LEVEL=INFO
+
+# Entry point: run the platform API + worker
+CMD ["python", "-m", "secure_training_platform.main"]

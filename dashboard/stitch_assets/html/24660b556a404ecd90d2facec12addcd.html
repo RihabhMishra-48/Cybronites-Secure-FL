@@ -1,0 +1,195 @@
+# Dataset Explorer
+
+## Product Overview
+
+**The Pitch:** A high-density, academic-grade interface for AI/ML students to rigorously inspect, visualize, and preprocess training datasets. It transforms opaque data folders into deeply analyzed, tabular, and graphical workflows.
+
+**For:** AI/ML students, academic researchers, and data science instructors who prioritize data transparency, exact distributions, and reproducible preprocessing.
+
+**Device:** desktop
+
+**Design Direction:** Academic clean. Rigorous, high-density tabular layouts with elegant serif typography for theoretical framing and precise sans-serif for raw data points.
+
+**Inspired by:** JupyterLab, Hugging Face Datasets, Academic Journal PDFs
+
+---
+
+## Screens
+
+- **Dataset Overview:** High-level statistical summary, metadata, and schema definition.
+- **Tabular Inspector:** Paginated, high-density data table for inspecting individual raw features and labels.
+- **Distribution Visualizer:** Graphical histograms, scatter plots, and class balance metrics.
+- **Preprocessing Pipeline:** Step-by-step configuration for normalization, tokenization, and augmentations.
+
+---
+
+## Key Flows
+
+**Inspect and Preprocess Dataset:** Validate class balance and apply a normalization step.
+
+1. User is on **Distribution Visualizer** -> sees imbalanced target classes via bar chart.
+2. User clicks **Preprocessing Pipeline** -> navigates to pipeline configuration.
+3. User selects `Add Step` -> `Normalize (Z-score)`.
+4. User clicks `Apply Pipeline` -> status indicator updates to `Processing...` then `Ready`.
+
+---
+
+<details>
+<summary>Design System</summary>
+
+## Color Palette
+
+- **Primary:** `#4299E1` - Action buttons, active tabs, primary links
+- **Background:** `#FFFFFF` - Main application background
+- **Surface:** `#F7FAFC` - Secondary panels, table headers, sidebar
+- **Text:** `#2D3748` - Main body text, data values
+- **Muted:** `#A0AEC0` - Metadata, borders, disabled states
+- **Accent:** `#48BB78` - Success states, "Pipeline Ready" indicators
+- **Warning:** `#ED8936` - Class imbalance alerts, missing value highlights
+
+## Typography
+
+- **Headings:** `Libre Baskerville`, 700, 24px
+- **Subheadings:** `Libre Baskerville`, 400, 18px
+- **Body / Data:** `IBM Plex Sans`, 400, 14px
+- **Small text:** `IBM Plex Sans`, 400, 12px
+- **Code / Tensors:** `IBM Plex Mono`, 400, 13px
+- **Buttons:** `IBM Plex Sans`, 500, 14px
+
+**Style notes:** 0px border radius (crisp edges), 1px solid `#E2E8F0` borders for separation, minimal shadows (flat design emphasis), dense vertical spacing (4px-8px).
+
+## Design Tokens
+
+```css
+:root {
+  --color-primary: #4299E1;
+  --color-background: #FFFFFF;
+  --color-surface: #F7FAFC;
+  --color-text: #2D3748;
+  --color-muted: #A0AEC0;
+  --color-success: #48BB78;
+  --color-warning: #ED8936;
+  --color-border: #E2E8F0;
+  
+  --font-heading: 'Libre Baskerville', serif;
+  --font-data: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  
+  --radius: 0px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>Screen Specifications</summary>
+
+### Dataset Overview
+
+**Purpose:** Display core dataset metadata, schema, and split sizes (Train/Val/Test).
+
+**Layout:** Two-column split. Left (300px sidebar): Navigation and metadata summary. Right (Fluid): Detailed schema definitions and statistical highlights.
+
+**Key Elements:**
+- **Title Block:** `Libre Baskerville` 28px, bottom border 1px solid `#E2E8F0`
+- **Metadata Grid:** 2-column key/value grid (`IBM Plex Mono` for values)
+- **Schema Table:** Flat table listing column name, data type, and non-null count
+
+**States:**
+- **Empty:** "No dataset loaded. Select an archive or connect to a hub."
+- **Loading:** Skeleton rows with left-to-right shimmer
+- **Error:** Red banner `#F56565` text, "Failed to parse metadata."
+
+**Components:**
+- **Stat Card:** 200x100px, `#F7FAFC` background, 24px `Libre Baskerville` number, 12px `IBM Plex Sans` label
+
+**Interactions:**
+- **Hover row:** Row background changes to `#F7FAFC`
+
+### Tabular Inspector
+
+**Purpose:** Deep dive into raw training examples and labels.
+
+**Layout:** Full-width dense data grid with a sticky top action bar for filtering and pagination.
+
+**Key Elements:**
+- **Filter Bar:** 32px height, input fields with bottom border only
+- **Data Grid:** 1px `#E2E8F0` borders on all cells, `IBM Plex Mono` for numerical values
+- **Pagination:** Bottom right, `Prev` / `Next` text buttons, no background
+
+**States:**
+- **Loading:** Spinners inside cells being fetched
+- **Error:** "Out of bounds" error on pagination
+
+**Components:**
+- **Data Cell:** 8px padding, `#2D3748` text, right-aligned for numbers
+
+**Interactions:**
+- **Click header:** Sorts column asc/desc, displays chevron icon
+- **Hover cell:** Tooltip for truncated text if > 50 chars
+
+### Distribution Visualizer
+
+**Purpose:** Surface class imbalances, feature distributions, and outliers.
+
+**Layout:** Grid of charts. 2x2 layout for continuous features, 1 full-width layout for target class bar chart.
+
+**Key Elements:**
+- **Target Histogram:** X-axis classes, Y-axis frequency, `#4299E1` bars
+- **Summary Metrics:** Top right absolute counts and Gini coefficient
+- **Export Button:** `Download PDF Report`, 32px height, solid `#4299E1`
+
+**States:**
+- **Loading:** Blank axes with a central `#4299E1` spinner
+- **Error:** "Insufficient data variance to plot."
+
+**Components:**
+- **Chart Container:** 1px `#E2E8F0` border, 16px padding, 18px `Libre Baskerville` title
+
+**Interactions:**
+- **Hover bar:** Shows exact count and percentage of total dataset
+
+### Preprocessing Pipeline
+
+**Purpose:** Configure, reorder, and apply data transformations.
+
+**Layout:** Left side: Available transforms library. Right side: Active pipeline sequence (drag-and-drop list) and output preview.
+
+**Key Elements:**
+- **Pipeline List:** Vertical stack of blocks. Each block has a header (e.g., "Normalize") and input fields (e.g., `Mean`, `Std`).
+- **Execute Button:** Fixed bottom right, 40px height, `#48BB78` background, white text: `Apply & Generate Tensors`
+- **Output Preview:** Split diff view showing "Before" and "After" first row values.
+
+**States:**
+- **Empty Pipeline:** "Drag a transformation here to begin."
+- **Loading:** Execute button text changes to `Processing (34%)`
+
+**Components:**
+- **Transform Block:** 100% width, `#F7FAFC` background, left border 3px solid `#4299E1`, grab icon on hover.
+
+**Interactions:**
+- **Click Add:** Block slides down into pipeline list
+- **Hover Block:** Shows delete (`x`) icon in top right
+
+</details>
+
+---
+
+<details>
+<summary>Build Guide</summary>
+
+**Stack:** HTML + Tailwind CSS v3
+
+**Build Order:**
+1. **Dataset Overview** - Establishes the serif/sans-serif typographic hierarchy and flat, border-based container styles.
+2. **Tabular Inspector** - Sets up the dense, 0-radius data grid structures required for the rest of the app.
+3. **Distribution Visualizer** - Integrates charting components (via Chart.js or similar) styled with the strict color palette.
+4. **Preprocessing Pipeline** - Most complex interaction (drag-and-drop, forms); relies on the typography and form inputs built in previous steps.
+
+</details>
