@@ -33,8 +33,8 @@ COPY core/ ./core/
 # Copy built frontend from Stage 1 to the location bridge.py expects it (dist)
 COPY --from=frontend-builder /app/dashboard/dist ./dist
 
-# Create a startup script
-COPY start.sh ./
+# Copy the robust Cloud Deployment Startup script
+COPY deployment_hf/start_cloud.sh ./start.sh
 RUN chmod +x start.sh
 
 # Environment variables
@@ -43,6 +43,9 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PORT=7860
 # HF-specific path markers
 ENV GUARDIAN_DB_PATH="/app/Cybronites/guardian.db"
+
+# Grant permission to Hugging Face user (1000) to write SQLite DB
+RUN chown -R 1000:1000 /app
 
 # Hugging Face Spaces use port 7860 by default
 EXPOSE 7860
