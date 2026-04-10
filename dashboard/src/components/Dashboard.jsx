@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Activity, ShieldCheck, Zap, Globe, Lock, Cpu, Server, TrendingUp, AlertCircle } from 'lucide-react';
+import { Activity, ShieldCheck, Zap, Globe, Lock, Cpu, Server, TrendingUp, AlertCircle, Copy, Users, Radio, StopCircle } from 'lucide-react';
 import { MetricsChart } from './MetricsChart';
 import { BlockchainRibbon } from './BlockchainExplorer';
 
@@ -14,8 +14,29 @@ export const Dashboard = ({
   blockchain = [],
   clients = [],
   rejectedCount = 0,
-  round = 0
+  round = 0,
+  distributedStatus = {},
+  startDistributed,
+  stopDistributed,
+  refreshDistributedStatus,
+  nodeRegistry = {},
+  apiBaseUrl = ''
 }) => {
+  const [distRounds, setDistRounds] = React.useState(5);
+  const [distMinClients, setDistMinClients] = React.useState(1);
+  const [copied, setCopied] = React.useState(false);
+
+  const joinCommand = `python run_client.py --server ${apiBaseUrl} --name "My-Device"`;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(joinCommand);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleStartDistributed = async () => {
+    await startDistributed(distRounds, distMinClients);
+  };
   const currentAccuracy = accuracyHistory.length > 0 
     ? (accuracyHistory[accuracyHistory.length - 1] * 100).toFixed(2)
     : "0.00";
@@ -128,6 +149,119 @@ export const Dashboard = ({
         </div>
         <div className="dash-journal-container">
           <BlockchainRibbon blockchain={blockchain} />
+        </div>
+      </div>
+
+      {/* ─── Distributed Training Panel ─── */}
+      <div className="dash-distributed-section">
+        <div className="dash-journal-header">
+          <h3 className="dash-journal-title">Distributed Training</h3>
+          <div className="dash-journal-line" />
+        </div>
+
+        <div className="dash-distributed-grid">
+          {/* Controls Card */}
+          <div className="dash-card dash-dist-controls">
+            <div className="dash-card-header">
+              <div className="dash-card-title-wrap">
+                <Globe size={14} className="dash-card-icon" />
+                <span className="dash-card-title">Cross-Network Training</span>
+              </div>
+              <div className={`dash-dist-status-badge ${distributedStatus.status === 'WAITING' ? 'dash-dist-waiting' : distributedStatus.status === 'COMPLETE' ? 'dash-dist-complete' : ''}`}>
+                <Radio size={8} />
+                <span>{distributedStatus.status || 'IDLE'}</span>
+              </div>
+            </div>
+            <div className="dash-card-body dash-dist-body">
+              {distributedStatus.status === 'IDLE' || !distributedStatus.status ? (
+                <>
+                  <div className="dash-dist-config">
+                    <div className="dash-dist-field">
+                      <label>Rounds</label>
+                      <input type="number" value={distRounds} onChange={e => setDistRounds(Number(e.target.value))} min={1} max={100} />
+                    </div>
+                    <div className="dash-dist-field">
+                      <label>Min Clients</label>
+                      <input type="number" value={distMinClients} onChange={e => setDistMinClients(Number(e.target.value))} min={1} max={10} />
+                    </div>
+                  </div>
+                  <button className="dash-btn-primary dash-dist-start-btn" onClick={handleStartDistributed} disabled={!isConnected}>
+                    <Globe size={12} />
+                    <span>Start Distributed Session</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="dash-dist-live">
+                    <div className="dash-metric-row">
+                      <span className="dash-metric-label">Round</span>
+                      <span className="dash-metric-value">{distributedStatus.round} / {distributedStatus.totalRounds}</span>
+                    </div>
+                    <div className="dash-metric-row">
+                      <span className="dash-metric-label">Connected Nodes</span>
+                      <span className="dash-metric-value">{distributedStatus.registeredClients}</span>
+                    </div>
+                    <div className="dash-metric-row">
+                      <span className="dash-metric-label">Updates This Round</span>
+                      <span className="dash-metric-value">{distributedStatus.updatesReceived} / {distributedStatus.updatesNeeded}</span>
+                    </div>
+                  </div>
+                  {distributedStatus.status !== 'COMPLETE' && (
+                    <button className="dash-btn-stop" onClick={stopDistributed}>
+                      <StopCircle size={12} />
+                      <span>Stop Session</span>
+                    </button>
+                  )}
+                  {distributedStatus.status === 'COMPLETE' && (
+                    <button className="dash-btn-primary dash-dist-start-btn" onClick={handleStartDistributed} disabled={!isConnected}>
+                      <Globe size={12} />
+                      <span>Start New Session</span>
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Join Command Card */}
+          <div className="dash-card dash-dist-join">
+            <div className="dash-card-header">
+              <div className="dash-card-title-wrap">
+                <Users size={14} className="dash-card-icon" />
+                <span className="dash-card-title">Invite Devices</span>
+              </div>
+            </div>
+            <div className="dash-card-body dash-dist-body">
+              <p className="dash-dist-desc">Share this command with anyone to join training from any device, any network:</p>
+              <div className="dash-dist-cmd-box">
+                <code>{joinCommand}</code>
+                <button className="dash-dist-copy-btn" onClick={handleCopy}>
+                  <Copy size={12} />
+                  <span>{copied ? 'Copied!' : 'Copy'}</span>
+                </button>
+              </div>
+              <div className="dash-dist-steps">
+                <div className="dash-dist-step"><span className="dash-dist-step-num">1</span> pip install torch torchvision requests</div>
+                <div className="dash-dist-step"><span className="dash-dist-step-num">2</span> Run the command above</div>
+                <div className="dash-dist-step"><span className="dash-dist-step-num">3</span> Client auto-joins the session</div>
+              </div>
+
+              {/* Live Node Registry */}
+              {Object.keys(nodeRegistry).length > 0 && (
+                <div className="dash-dist-nodes">
+                  <div className="dash-dist-nodes-title">Connected Nodes</div>
+                  {Object.entries(nodeRegistry).map(([id, node]) => (
+                    <div key={id} className="dash-dist-node-row">
+                      <div className={`dash-dist-node-dot ${node.status === 'VALID' ? 'dash-dot-valid' : 'dash-dot-connected'}`} />
+                      <span className="dash-dist-node-name">{node.name || id.slice(0,8)}</span>
+                      <span className="dash-dist-node-ip">{node.ip}</span>
+                      <span className={`dash-dist-node-status ${node.status === 'VALID' ? 'dash-status-valid' : ''}`}>{node.status}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -427,6 +561,223 @@ export const Dashboard = ({
           background: #000;
           display: flex;
           flex-direction: column;
+        }
+
+        /* ─── Distributed Panel ─── */
+        .dash-distributed-section {
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        }
+        .dash-distributed-grid {
+          display: grid;
+          grid-template-columns: 380px 1fr;
+          gap: 24px;
+        }
+        .dash-dist-body {
+          padding: 24px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .dash-dist-config {
+          display: flex;
+          gap: 16px;
+        }
+        .dash-dist-field {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .dash-dist-field label {
+          font-size: 9px;
+          font-weight: 700;
+          color: var(--text-muted);
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+        }
+        .dash-dist-field input {
+          width: 100%;
+          padding: 8px 12px;
+          border: 1px solid var(--border);
+          background: var(--bg-main);
+          color: var(--text-main);
+          font-size: 14px;
+          font-weight: 600;
+          font-family: var(--font-mono, monospace);
+        }
+        .dash-dist-start-btn {
+          width: 100%;
+          justify-content: center;
+          height: 44px;
+        }
+        .dash-dist-live {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .dash-dist-status-badge {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 9px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: var(--text-muted);
+          padding: 4px 12px;
+          border: 1px solid var(--border);
+        }
+        .dash-dist-waiting {
+          color: var(--warning, #f59e0b);
+          border-color: var(--warning, #f59e0b);
+          animation: dash-pulse 2s infinite;
+        }
+        .dash-dist-complete {
+          color: var(--success);
+          border-color: var(--success);
+        }
+        .dash-btn-stop {
+          width: 100%;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          background: transparent;
+          border: 1px solid var(--error, #ef4444);
+          color: var(--error, #ef4444);
+          font-size: 10px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .dash-btn-stop:hover {
+          background: var(--error, #ef4444);
+          color: #fff;
+        }
+        .dash-dist-desc {
+          font-size: 12px;
+          color: var(--text-muted);
+          line-height: 1.5;
+          margin: 0;
+        }
+        .dash-dist-cmd-box {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: var(--bg-main);
+          border: 1px solid var(--border);
+          padding: 10px 12px;
+          overflow-x: auto;
+        }
+        .dash-dist-cmd-box code {
+          flex: 1;
+          font-size: 11px;
+          font-family: var(--font-mono, monospace);
+          color: var(--primary);
+          white-space: nowrap;
+        }
+        .dash-dist-copy-btn {
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 4px 12px;
+          border: 1px solid var(--border);
+          background: transparent;
+          color: var(--text-muted);
+          font-size: 10px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .dash-dist-copy-btn:hover {
+          border-color: var(--primary);
+          color: var(--primary);
+        }
+        .dash-dist-steps {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .dash-dist-step {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 11px;
+          color: var(--text-muted);
+        }
+        .dash-dist-step-num {
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--primary);
+          color: #fff;
+          font-size: 9px;
+          font-weight: 800;
+          flex-shrink: 0;
+        }
+        .dash-dist-nodes {
+          border-top: 1px solid var(--border);
+          padding-top: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .dash-dist-nodes-title {
+          font-size: 9px;
+          font-weight: 700;
+          color: var(--text-muted);
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          margin-bottom: 4px;
+        }
+        .dash-dist-node-row {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 6px 0;
+          border-bottom: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+        }
+        .dash-dist-node-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+        .dash-dot-connected { background: var(--warning, #f59e0b); }
+        .dash-dot-valid { background: var(--success); }
+        .dash-dist-node-name {
+          font-size: 11px;
+          font-weight: 600;
+          color: var(--text-main);
+          flex: 1;
+        }
+        .dash-dist-node-ip {
+          font-size: 10px;
+          font-family: var(--font-mono, monospace);
+          color: var(--text-muted);
+          opacity: 0.6;
+        }
+        .dash-dist-node-status {
+          font-size: 9px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: var(--text-muted);
+        }
+        .dash-status-valid { color: var(--success); }
+
+        @media (max-width: 1200px) {
+          .dash-distributed-grid { grid-template-columns: 1fr; }
         }
 
         /* ─── Responsive ─── */

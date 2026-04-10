@@ -38,7 +38,12 @@ function App() {
     modelArchitecture,
     shards,
     clientsActive,
-    labState
+    labState,
+    distributedStatus,
+    startDistributed,
+    stopDistributed,
+    refreshDistributedStatus,
+    API_BASE_URL,
   } = useSecureFederated();
 
   const [currentView, setCurrentView] = useState('dashboard');
@@ -177,6 +182,12 @@ function App() {
             clients={clients}
             rejectedCount={rejectedCount}
             round={round}
+            distributedStatus={distributedStatus}
+            startDistributed={startDistributed}
+            stopDistributed={stopDistributed}
+            refreshDistributedStatus={refreshDistributedStatus}
+            nodeRegistry={nodeRegistry}
+            apiBaseUrl={API_BASE_URL}
           />
         );
       case 'architecture':
