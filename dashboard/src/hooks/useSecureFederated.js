@@ -39,6 +39,11 @@ export function useSecureFederated() {
   const [shards, setShards] = useState([]); // NEW STATE
   const [modelArchitecture, setModelArchitecture] = useState('# Loading Model source...'); 
   const [labState, setLabState] = useState({ status: 'IDLE', progress: 0, epoch: 0, loss: 0, accuracy: 0, ptPath: null, onnxPath: null });
+  const [distributedStatus, setDistributedStatus] = useState({
+    status: 'IDLE', round: 0, totalRounds: 0, minClients: 1,
+    registeredClients: 0, updatesReceived: 0, updatesNeeded: 1,
+    serverCommand: ''
+  });
 
   const ws = useRef(null);
 
@@ -194,6 +199,57 @@ export function useSecureFederated() {
     }
   };
 
+  // ── Distributed Federated Learning ──
+  const startDistributed = async (numRounds = 5, minClients = 1) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/distributed/start`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ num_rounds: numRounds, min_clients: minClients })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setDistributedStatus(prev => ({ ...prev, status: 'WAITING', round: 1, totalRounds: numRounds, minClients }));
+      }
+      return data;
+    } catch (err) {
+      console.error("Distributed Start Error:", err);
+      return { success: false, error: err.message };
+    }
+  };
+
+  const stopDistributed = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/distributed/stop`, { method: 'POST' });
+      const data = await response.json();
+      setDistributedStatus(prev => ({ ...prev, status: 'IDLE' }));
+      return data;
+    } catch (err) {
+      console.error("Distributed Stop Error:", err);
+      return { success: false };
+    }
+  };
+
+  const refreshDistributedStatus = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/distributed/status`);
+      const data = await response.json();
+      setDistributedStatus({
+        status: data.status || 'IDLE',
+        round: data.round || 0,
+        totalRounds: data.total_rounds || 0,
+        minClients: data.min_clients || 1,
+        registeredClients: data.registered_clients || 0,
+        updatesReceived: data.updates_received || 0,
+        updatesNeeded: data.updates_needed || 1,
+        serverCommand: `python run_client.py --server ${API_BASE_URL} --name "My-Device"`
+      });
+      return data;
+    } catch (err) {
+      console.error("Distributed Status Error:", err);
+    }
+  };
+
   return {
     round,
     isActive,
@@ -215,6 +271,12 @@ export function useSecureFederated() {
     modelArchitecture,
     shards,
     clientsActive,
-    labState
+    labState,
+    // Distributed Mode
+    distributedStatus,
+    startDistributed,
+    stopDistributed,
+    refreshDistributedStatus,
+    API_BASE_URL,
   };
 }

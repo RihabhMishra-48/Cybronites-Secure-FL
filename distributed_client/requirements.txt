@@ -1,0 +1,10 @@
+# Cybronites Distributed Learning Client — Dependencies
+# Install:  pip install -r requirements.txt
+
+# Core ML
+torch>=1.12.0
+torchvision>=0.13.0
+numpy>=1.21.0
+
+# HTTP Communication
+requests>=2.28.0

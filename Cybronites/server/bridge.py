@@ -13,6 +13,7 @@ import urllib.request
 from Cybronites.server.auth import router as auth_router
 from Cybronites.utils.structured_logging import setup_structured_logging
 import Cybronites.server.training_engine as engine
+from Cybronites.server.distributed_coordinator import DistributedCoordinator, params_to_b64
 
 # Setup logging
 logging.basicConfig(
@@ -255,6 +256,11 @@ async def startup():
     bridge.load_model_code()
     bridge.fetch_public_ip()
     
+    # Initialize Distributed Coordinator
+    dist_coord = DistributedCoordinator.get_instance()
+    dist_coord.set_broadcast(bridge.broadcast_sync)
+    logger.info("Distributed Coordinator initialized and linked to bridge.")
+    
     # Initialize Orchestrator and start Log Listener thread
     from Cybronites.server.orchestrator import get_orchestrator
     orchestrator = get_orchestrator()
@@ -494,6 +500,90 @@ async def download_model(file_format: str):
         return {"error": f"File {filename} not found."}
         
     return FileResponse(path, filename=filename)
+
+# ── Distributed Federated Learning REST Endpoints ──
+# These endpoints allow remote clients on ANY network to participate
+# in federated training through the existing HuggingFace Space URL.
+# No gRPC port, no ngrok, no same-WiFi requirement.
+
+@app.post("/api/v1/distributed/start")
+async def start_distributed_session(data: Dict[str, Any] = {}):
+    """Start a new distributed FL session. Called from the dashboard."""
+    coord = DistributedCoordinator.get_instance()
+    num_rounds = data.get("num_rounds", 5)
+    min_clients = data.get("min_clients", 1)
+    
+    result = coord.start_session(num_rounds=num_rounds, min_clients=min_clients)
+    return {"success": True, **result}
+
+@app.post("/api/v1/distributed/stop")
+async def stop_distributed_session():
+    """Force-stop the current distributed session."""
+    coord = DistributedCoordinator.get_instance()
+    coord.stop_session()
+    return {"success": True, "message": "Session stopped."}
+
+@app.post("/api/v1/distributed/register")
+async def register_distributed_client(data: Dict[str, str] = {}):
+    """Register a remote client node. Returns a unique client ID."""
+    coord = DistributedCoordinator.get_instance()
+    name = data.get("name", "Unknown-Node")
+    ip = data.get("ip", "0.0.0.0")
+    
+    client_id = coord.register_client(name, ip)
+    return {
+        "success": True, 
+        "client_id": client_id,
+        "session_status": coord.status,
+        "current_round": coord.round,
+    }
+
+@app.get("/api/v1/distributed/get-model")
+async def get_distributed_model():
+    """Download the current global model parameters."""
+    coord = DistributedCoordinator.get_instance()
+    
+    if coord.status == "IDLE":
+        return {"error": "No active session. Wait for session to start."}
+    
+    return coord.get_global_params()
+
+@app.post("/api/v1/distributed/submit-update")
+async def submit_distributed_update(data: Dict[str, Any] = {}):
+    """Submit trained model parameters from a client node."""
+    coord = DistributedCoordinator.get_instance()
+    
+    client_id = data.get("client_id")
+    params_b64 = data.get("params", [])
+    num_examples = data.get("num_examples", 100)
+    metrics = data.get("metrics", {})
+    
+    if not client_id:
+        return {"success": False, "message": "client_id is required"}
+    if not params_b64:
+        return {"success": False, "message": "params are required"}
+    
+    return coord.submit_update(client_id, params_b64, num_examples, metrics)
+
+@app.get("/api/v1/distributed/status")
+async def get_distributed_status():
+    """Get current distributed session status. Used by clients for polling."""
+    coord = DistributedCoordinator.get_instance()
+    return coord.get_status()
+
+@app.get("/api/v1/distributed/connection-info")
+async def get_distributed_connection_info():
+    """Get connection instructions for remote clients."""
+    coord = DistributedCoordinator.get_instance()
+    server_url = bridge.state.get("server_ip", "127.0.0.1")
+    
+    return {
+        "server_url": server_url,
+        "api_base": f"https://{server_url}" if server_url != "127.0.0.1" else "http://127.0.0.1:7860",
+        "status": coord.status,
+        "registered_clients": len(coord.registered_clients),
+        "command": f'python run_client.py --server https://rishuuuuuu-cybronites-secure-fl.hf.space --name "My-Device"',
+    }
 
 # ── Static Dashboard Serving (for Deployment) ──
 # Look for 'static' (Hugging Face) or 'dist' (Local build)
