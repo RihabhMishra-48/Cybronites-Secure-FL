@@ -4,13 +4,40 @@ This guide explains how to transition from a local simulation to a truly distrib
 
 ---
 
+## ☁️ 0. Cloud Deployment (Vercel + HuggingFace)
+
+The system uses a **split architecture**:
+- **Vercel** — Serves the React dashboard (static frontend)
+- **HuggingFace Spaces** — Runs the FastAPI bridge + Flower FL server (Python backend)
+
+### Required Env Vars on Vercel
+
+Go to your Vercel project → **Settings → Environment Variables** and add:
+
+| Variable | Value | Description |
+|---|---|---|
+| `VITE_BACKEND_URL` | `https://YOUR-HF-USERNAME-cybronites-fl.hf.space` | Your HuggingFace Space URL |
+
+> **After adding the variable, trigger a Redeploy on Vercel.**
+
+### Required Secrets on HuggingFace Space
+
+Go to your HF Space → **Settings → Repository Secrets** and add:
+
+| Secret | Example Value | Description |
+|---|---|---|
+| `JWT_SECRET` | `a-long-random-string-32chars+` | JWT signing key — change from default! |
+| `GUARDIAN_DB_PATH` | `/app/Cybronites/guardian.db` | SQLite DB path (already set in Dockerfile) |
+
+---
+
 ## 🏗️ 1. Server Setup (Machine A)
 
 The server machine hosts the **Flower FL Server** and the **FastAPI Bridge**.
 
 ### Prerequisites
 - Python 3.9+ installed and dependencies from `requirements.txt`.
-- Open ports **7880** (Bridge) and **8095** (FL Server) in your Firewall.
+- Open ports **7880** (Bridge) and **8080** (FL Server) in your Firewall.
 
 ### Execution
 Run the orchestrator on the server machine:
@@ -68,7 +95,7 @@ If you are running the dashboard via `npm run dev`:
 
 If clients cannot connect:
 1. **Ping Test**: Ensure Machine B can ping Machine A (`ping 192.168.1.15`).
-2. **Port Check**: Ensure port **8095** is not blocked by Windows Defender or any other firewall.
+2. **Port Check**: Ensure port **8080** is not blocked by Windows Defender or any other firewall.
 3. **Subnet**: Ensure both machines are on the same subnet (e.g., connected to the same Wi-Fi router).
 
 ---

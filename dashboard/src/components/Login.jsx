@@ -12,10 +12,13 @@ export const Login = ({ onLogin }) => {
   const [error, setError] = useState('');
 
   const getApiUrl = () => {
-    // In production (Hugging Face / Deployment), we use relative paths or the window origin
-    // In development, we use the VITE_BACKEND_PORT environment variable
+    // In production (Vercel frontend + HuggingFace backend split-arch):
+    //   VITE_BACKEND_URL must be set to the HuggingFace Space URL, e.g.:
+    //   https://your-username-cybronites-fl.hf.space
+    // In development, proxy via Vite to localhost backend.
     if (import.meta.env.PROD) {
-      return window.location.origin;
+      // Use explicit backend URL if set, otherwise fall back to same origin (for self-hosted)
+      return import.meta.env.VITE_BACKEND_URL || window.location.origin;
     }
     const port = import.meta.env.VITE_BACKEND_PORT || '7880';
     return `http://localhost:${port}`;
@@ -45,7 +48,17 @@ export const Login = ({ onLogin }) => {
         body: JSON.stringify(body),
       });
 
-      const data = await response.json();
+      // Guard: parse JSON safely — an empty/HTML body causes "Unexpected end of JSON input"
+      let data = {};
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        if (!response.ok) {
+          throw new Error(`Backend returned non-JSON response (${response.status}). Is the backend online?\n${text.slice(0, 120)}`);
+        }
+      }
 
       if (!response.ok) {
         const errMsg = typeof data.detail === 'string' 

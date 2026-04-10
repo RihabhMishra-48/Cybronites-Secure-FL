@@ -19,3 +19,9 @@ fastapi
 uvicorn
 python-multipart
 websockets
+
+# Auth dependencies (REQUIRED by Cybronites/server/auth.py)
+python-jose[cryptography]   # JWT token creation & validation
+bcrypt                       # Password hashing
+email-validator              # Pydantic EmailStr support
+passlib[bcrypt]              # bcrypt helper layer

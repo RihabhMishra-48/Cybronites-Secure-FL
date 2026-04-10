@@ -3,6 +3,7 @@ import torch
 import numpy as np
 import sys
 import os
+import time
 import logging
 import urllib.request
 from Cybronites.utils.structured_logging import setup_structured_logging
@@ -147,5 +148,4 @@ def main():
                 sys.exit(1)
 
 if __name__ == "__main__":
-    import time
     main()

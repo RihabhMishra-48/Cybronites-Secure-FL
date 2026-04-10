@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 const isProd = import.meta.env.PROD;
-export const BACKEND_PORT = import.meta.env.VITE_BACKEND_PORT || '7861';
+export const BACKEND_PORT = import.meta.env.VITE_BACKEND_PORT || '7880';
 export const BACKEND_IP = import.meta.env.VITE_BACKEND_IP || '127.0.0.1';
-export const API_BASE_URL = isProd ? window.location.origin : `http://${BACKEND_IP}:${BACKEND_PORT}`;
+
+// In split-arch (Vercel frontend + HuggingFace backend), VITE_BACKEND_URL must point to HF Space.
+// In self-hosted mode (both on HF), same origin works.
+const PROD_BACKEND = import.meta.env.VITE_BACKEND_URL || window.location.origin;
+
+export const API_BASE_URL = isProd ? PROD_BACKEND : `http://${BACKEND_IP}:${BACKEND_PORT}`;
 export const WS_URL = isProd 
-  ? `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws` 
+  ? `${PROD_BACKEND.replace(/^https?/, (p) => p === 'https' ? 'wss' : 'ws')}/ws`
   : `ws://${BACKEND_IP}:${BACKEND_PORT}/ws`;
 
 export function useSecureFederated() {

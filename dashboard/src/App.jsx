@@ -106,7 +106,9 @@ function App() {
       if (!token) return;
 
       try {
-        const baseUrl = import.meta.env.PROD ? window.location.origin : `http://localhost:${import.meta.env.VITE_BACKEND_PORT || '7880'}`;
+        const baseUrl = import.meta.env.PROD 
+          ? (import.meta.env.VITE_BACKEND_URL || window.location.origin)
+          : `http://localhost:${import.meta.env.VITE_BACKEND_PORT || '7880'}`;
         const response = await fetch(`${baseUrl}/api/auth/me?token=${token}`);
         if (response.ok) {
           const userData = await response.json();

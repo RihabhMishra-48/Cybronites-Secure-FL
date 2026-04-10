@@ -18,14 +18,21 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy Project Files
 COPY Cybronites/ /app/Cybronites/
 COPY blockchain/ /app/blockchain/
+COPY security/ /app/security/
 COPY dashboard/dist/ /app/static/
 COPY run_local.py .
+
+# Ensure DB directory is writable (guardian.db is git-ignored, created at runtime by init_db())
+RUN mkdir -p /app/Cybronites
 
 # Environment Variables
 ENV PYTHONPATH=/app
 ENV PORT=7860
 ENV FLOWER_PORT=8080
 ENV ROUNDS=5
+# Auth & DB configuration (override via HF Space Secrets for production)
+ENV JWT_SECRET=change-me-in-hf-secrets
+ENV GUARDIAN_DB_PATH=/app/Cybronites/guardian.db
 
 # Copy Startup Script
 COPY deployment_hf/start_cloud.sh .
