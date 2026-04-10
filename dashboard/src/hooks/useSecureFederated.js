@@ -6,7 +6,8 @@ export const BACKEND_IP = import.meta.env.VITE_BACKEND_IP || '127.0.0.1';
 
 // In split-arch (Vercel frontend + HuggingFace backend), VITE_BACKEND_URL must point to HF Space.
 // In self-hosted mode (both on HF), same origin works.
-const PROD_BACKEND = import.meta.env.VITE_BACKEND_URL || window.location.origin;
+const _rawProdBackend = import.meta.env.VITE_BACKEND_URL || window.location.origin;
+const PROD_BACKEND = _rawProdBackend.replace(/\/+$/, '');
 
 export const API_BASE_URL = isProd ? PROD_BACKEND : `http://${BACKEND_IP}:${BACKEND_PORT}`;
 export const WS_URL = isProd 

@@ -12,16 +12,19 @@ export const Login = ({ onLogin }) => {
   const [error, setError] = useState('');
 
   const getApiUrl = () => {
+    let url = '';
     // In production (Vercel frontend + HuggingFace backend split-arch):
     //   VITE_BACKEND_URL must be set to the HuggingFace Space URL, e.g.:
     //   https://your-username-cybronites-fl.hf.space
     // In development, proxy via Vite to localhost backend.
     if (import.meta.env.PROD) {
       // Use explicit backend URL if set, otherwise fall back to same origin (for self-hosted)
-      return import.meta.env.VITE_BACKEND_URL || window.location.origin;
+      url = import.meta.env.VITE_BACKEND_URL || window.location.origin;
+    } else {
+      const port = import.meta.env.VITE_BACKEND_PORT || '7880';
+      url = `http://localhost:${port}`;
     }
-    const port = import.meta.env.VITE_BACKEND_PORT || '7880';
-    return `http://localhost:${port}`;
+    return url.replace(/\/+$/, '');
   };
 
   const handleSubmit = async (e) => {
