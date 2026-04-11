@@ -95,9 +95,29 @@ export function useSecureFederated() {
             if (payload.chain !== undefined) setBlockchain(payload.chain);
             if (payload.node_registry !== undefined) setNodeRegistry(payload.node_registry);
             if (payload.hyperparams) setHyperparams(payload.hyperparams);
-            if (payload.round_history) setRoundHistory(payload.round_history);
+            if (payload.round_history) setRoundHistory(
+              payload.round_history.map(r => ({
+                ...r,
+                // Ensure fields TrainingWorkspace ledger expects exist
+                lr: r.lr ?? 0.01,
+                batch: r.batch ?? 32,
+              }))
+            );
             if (payload.shards) setShards(payload.shards);
             if (payload.model_architecture) setModelArchitecture(payload.model_architecture);
+
+            // Sync distributed training status from WebSocket broadcasts
+            if (payload.status && ['IDLE','WAITING','AGGREGATING','COMPLETE'].includes(payload.status)) {
+              setDistributedStatus(prev => ({
+                ...prev,
+                status: payload.status,
+                round: payload.round ?? prev.round,
+                totalRounds: payload.total_rounds ?? prev.totalRounds,
+                registeredClients: payload.clients_active ?? prev.registeredClients,
+                updatesReceived: payload.updates_received ?? prev.updatesReceived,
+                updatesNeeded: payload.updates_needed ?? prev.updatesNeeded,
+              }));
+            }
             break;
           }
 

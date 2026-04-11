@@ -293,6 +293,9 @@ class DistributedCoordinator:
                 "status": "VALID",
                 "norm": norm,
                 "timestamp": time.time(),
+                # Fields expected by TrainingWorkspace ledger
+                "lr": 0.01,
+                "batch": 32,
             })
             if len(self.round_history) > 200:
                 self.round_history = self.round_history[-200:]
@@ -300,6 +303,14 @@ class DistributedCoordinator:
             updates_count = len(self.round_updates)
             self._broadcast("LOG", 
                 f"  📊 Updates: {updates_count}/{self.min_clients} received for Round {self.round}")
+            # Live update so dashboard panel shows progress mid-round
+            self._broadcast("STAT_UPDATE", {
+                "updates_received": updates_count,
+                "updates_needed": self.min_clients,
+                "clients_active": len(self.registered_clients),
+                "node_registry": self.node_registry,
+                "round_history": self.round_history,
+            })
 
             # Check if we have enough updates to aggregate
             if updates_count >= self.min_clients:
@@ -366,11 +377,14 @@ class DistributedCoordinator:
             self._broadcast("STAT_UPDATE", {
                 "status": "COMPLETE",
                 "round": self.round,
+                "total_rounds": self.total_rounds,
                 "accuracy_history": self.accuracy_history,
                 "loss_history": self.loss_history,
                 "node_registry": self.node_registry,
                 "round_history": self.round_history,
                 "clients_active": len(self.registered_clients),
+                "updates_received": 0,
+                "updates_needed": self.min_clients,
             })
             self._broadcast("LOG", "🏁 SESSION COMPLETE: All rounds finalized.")
             logger.info("Distributed FL session complete.")
@@ -381,11 +395,14 @@ class DistributedCoordinator:
             self._broadcast("STAT_UPDATE", {
                 "status": "WAITING",
                 "round": self.round,
+                "total_rounds": self.total_rounds,
                 "accuracy_history": self.accuracy_history,
                 "loss_history": self.loss_history,
                 "node_registry": self.node_registry,
                 "round_history": self.round_history,
                 "clients_active": len(self.registered_clients),
+                "updates_received": 0,
+                "updates_needed": self.min_clients,
             })
             self._broadcast("LOG", f"Round {self.round}/{self.total_rounds}: Waiting for client updates...")
 
